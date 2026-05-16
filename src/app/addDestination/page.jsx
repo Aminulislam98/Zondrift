@@ -119,7 +119,7 @@ export default function AddDestinationPage() {
               <TextField name="tagline" isRequired className="w-full">
                 <Label className={labelClass}>Tagline *</Label>
                 <Input
-                  placeholder="e.g. Where gods meet the ocean"
+                  placeholder="e.g. Discover Places You’ll Never Forget"
                   className={inputClass}
                 />
                 <Description className={descClass}>

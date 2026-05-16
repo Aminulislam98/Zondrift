@@ -5,33 +5,30 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   FiArrowLeft,
-  FiUser,
-  FiMail,
-  FiPhone,
-  FiCalendar,
-  FiUsers,
-  FiMessageSquare,
   FiMapPin,
   FiClock,
   FiCheck,
+  FiUsers,
 } from "react-icons/fi";
+import {
+  Input,
+  Label,
+  TextField,
+  TextArea,
+  Description,
+  FieldError,
+  Form,
+} from "@heroui/react";
 
-// ── Hardcoded destination — replace with fetch using searchParams.destination ──
-// Real:
-// const searchParams = useSearchParams()
-// const destId = searchParams.get("destination")
-// const res = await fetch(`http://localhost:4000/destination/${destId}`)
-// const dest = await res.json()
+// ── Replace with real fetch later ──
 const dest = {
   _id: "1",
   name: "Bali Paradise",
   country: "Indonesia",
-  category: "Beach",
   duration: "7 Days / 6 Nights",
   image:
     "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800&auto=format&fit=crop&q=80",
   price: 2700,
-  rating: 4.9,
   included: [
     "Return flights from London",
     "7 nights accommodation",
@@ -39,25 +36,14 @@ const dest = {
     "Airport transfers",
   ],
 };
-// ─────────────────────────────────────────────────
+// ──────────────────────────────────
 
 const inputClass =
   "w-full h-11 px-3.5 text-[13.5px] text-black tracking-[-0.01em] bg-white border border-black/[0.15] rounded-none outline-none focus:border-black transition-colors placeholder:text-[#bbb]";
-
 const labelClass =
-  "text-[13px] font-medium text-black tracking-[-0.01em] block mb-1.5";
-
+  "text-[13px] font-medium text-black tracking-[-0.01em] mb-1 block";
 const descClass = "text-[12px] text-[#aaa] tracking-[-0.01em] mt-1 block";
-
-function Field({ label, hint, children }) {
-  return (
-    <div className="flex flex-col w-full">
-      <label className={labelClass}>{label}</label>
-      {children}
-      {hint && <span className={descClass}>{hint}</span>}
-    </div>
-  );
-}
+const errorClass = "text-[12px] text-red-500 tracking-[-0.01em] mt-1 block";
 
 export default function BookingPage() {
   const [travellers, setTravellers] = useState(1);
@@ -69,11 +55,8 @@ export default function BookingPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
     const form = new FormData(e.currentTarget);
     const bookingData = Object.fromEntries(form.entries());
-
-    // attach extra fields
     bookingData.destinationId = dest._id;
     bookingData.destinationName = dest.name;
     bookingData.travellers = Number(travellers);
@@ -85,24 +68,20 @@ export default function BookingPage() {
       month: "long",
       year: "numeric",
     });
-
     console.log("booking data:", bookingData);
-
-    // TODO: send to Express API
+    // TODO: uncomment when Express API ready
     // const res = await fetch("http://localhost:4000/bookings", {
     //   method: "POST",
     //   headers: { "content-type": "application/json" },
     //   body: JSON.stringify(bookingData),
     // })
-    // const data = await res.json()
-
     setTimeout(() => {
       setLoading(false);
       setSubmitted(true);
     }, 800);
   };
 
-  // ── Success state ──
+  // ── Success screen ──
   if (submitted) {
     return (
       <main className="min-h-screen bg-white pt-[52px] flex items-center justify-center px-5">
@@ -114,9 +93,8 @@ export default function BookingPage() {
             Booking received
           </h1>
           <p className="text-[14px] text-[#888] tracking-[-0.01em] leading-relaxed mb-2">
-            Thank you for booking with Zondrift. A travel advisor will contact
-            you within 24 hours to confirm your trip to{" "}
-            <span className="text-black font-medium">{dest.name}</span>.
+            A travel advisor will contact you within 24 hours to confirm your
+            trip to <span className="text-black font-medium">{dest.name}</span>.
           </p>
           <p className="text-[13px] text-[#aaa] tracking-[-0.01em] mb-10">
             Check your email for a confirmation summary.
@@ -124,13 +102,13 @@ export default function BookingPage() {
           <div className="flex flex-col sm:flex-row items-center gap-3 justify-center">
             <Link
               href="/bookings"
-              className="bg-black text-white text-[13px] font-medium tracking-[-0.01em] px-6 py-2.5 hover:bg-black/80 transition-colors"
+              className="bg-black text-white text-[13px] font-medium px-6 py-2.5 hover:bg-black/80 transition-colors"
             >
               View my bookings
             </Link>
             <Link
               href="/destinations"
-              className="text-[13px] text-[#555] tracking-[-0.01em] border border-black/[0.15] px-6 py-2.5 hover:border-black/30 transition-colors"
+              className="text-[13px] text-[#555] border border-black/[0.15] px-6 py-2.5 hover:border-black/30 transition-colors"
             >
               Explore more
             </Link>
@@ -155,7 +133,7 @@ export default function BookingPage() {
           <span className="text-[11px] font-medium tracking-[0.14em] uppercase text-[#aaa] block mb-3">
             Booking
           </span>
-          <h1 className="text-[30px] md:text-[40px] font-medium tracking-[-0.04em] text-black leading-[1.05]">
+          <h1 className="text-[30px] md:text-[40px] font-medium tracking-[-0.04em] text-black">
             Complete your booking
           </h1>
         </div>
@@ -163,10 +141,14 @@ export default function BookingPage() {
         {/* Two column layout */}
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-12 py-12">
           {/* ── Left — Form ── */}
-          <form onSubmit={handleSubmit} className="flex flex-col gap-10">
-            {/* Section 1 — Personal details */}
-            <div>
-              <div className="flex items-center gap-3 mb-6">
+          <Form
+            onSubmit={handleSubmit}
+            validationBehavior="native"
+            className="flex flex-col gap-10"
+          >
+            {/* Section 01 — Personal details */}
+            <div className="flex flex-col gap-5">
+              <div className="flex items-center gap-3">
                 <div className="w-6 h-6 bg-black flex items-center justify-center shrink-0">
                   <span className="text-[10px] font-medium text-white">01</span>
                 </div>
@@ -175,58 +157,43 @@ export default function BookingPage() {
                 </h2>
               </div>
 
-              <div className="flex flex-col gap-5">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                  <Field label="Full name">
-                    <div className="relative">
-                      <FiUser className="absolute left-3.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#bbb]" />
-                      <input
-                        name="fullName"
-                        required
-                        placeholder="Aminul Islam"
-                        className={`${inputClass} pl-10`}
-                      />
-                    </div>
-                  </Field>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <TextField name="fullName" isRequired className="w-full">
+                  <Label className={labelClass}>Full name *</Label>
+                  <Input placeholder="Aminul Islam" className={inputClass} />
+                  <FieldError className={errorClass} />
+                </TextField>
 
-                  <Field label="Phone number">
-                    <div className="relative">
-                      <FiPhone className="absolute left-3.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#bbb]" />
-                      <input
-                        name="phone"
-                        required
-                        type="tel"
-                        placeholder="+44 7700 000000"
-                        className={`${inputClass} pl-10`}
-                      />
-                    </div>
-                  </Field>
-                </div>
-
-                <Field
-                  label="Email address"
-                  hint="Booking confirmation will be sent to this email"
-                >
-                  <div className="relative">
-                    <FiMail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#bbb]" />
-                    <input
-                      name="email"
-                      required
-                      type="email"
-                      placeholder="aminul@example.com"
-                      className={`${inputClass} pl-10`}
-                    />
-                  </div>
-                </Field>
+                <TextField name="phone" isRequired className="w-full">
+                  <Label className={labelClass}>Phone number *</Label>
+                  <Input
+                    type="tel"
+                    placeholder="+44 7700 000000"
+                    className={inputClass}
+                  />
+                  <FieldError className={errorClass} />
+                </TextField>
               </div>
+
+              <TextField name="email" isRequired className="w-full">
+                <Label className={labelClass}>Email address *</Label>
+                <Input
+                  type="email"
+                  placeholder="aminul@example.com"
+                  className={inputClass}
+                />
+                <Description className={descClass}>
+                  Booking confirmation will be sent to this email
+                </Description>
+                <FieldError className={errorClass} />
+              </TextField>
             </div>
 
-            {/* Divider */}
             <div className="h-px bg-black/[0.06]" />
 
-            {/* Section 2 — Trip details */}
-            <div>
-              <div className="flex items-center gap-3 mb-6">
+            {/* Section 02 — Trip details */}
+            <div className="flex flex-col gap-5">
+              <div className="flex items-center gap-3">
                 <div className="w-6 h-6 bg-black flex items-center justify-center shrink-0">
                   <span className="text-[10px] font-medium text-white">02</span>
                 </div>
@@ -235,100 +202,90 @@ export default function BookingPage() {
                 </h2>
               </div>
 
-              <div className="flex flex-col gap-5">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                  {/* Number of travellers */}
-                  <Field
-                    label="Number of travellers"
-                    hint={`$${dest.price.toLocaleString()} × ${travellers} = $${totalPrice.toLocaleString()}`}
-                  >
-                    <div className="flex items-center border border-black/[0.15] h-11">
-                      <button
-                        type="button"
-                        onClick={() =>
-                          setTravellers(Math.max(1, travellers - 1))
-                        }
-                        className="w-11 h-full flex items-center justify-center text-[#888] hover:text-black hover:bg-black/[0.03] transition-colors border-r border-black/[0.1]"
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                {/* Travellers counter */}
+                <div className="flex flex-col gap-1.5">
+                  <Label className={labelClass}>Number of travellers</Label>
+                  <div className="flex items-center border border-black/[0.15] h-11">
+                    <button
+                      type="button"
+                      onClick={() => setTravellers(Math.max(1, travellers - 1))}
+                      className="w-11 h-full flex items-center justify-center text-[#888] hover:text-black hover:bg-black/[0.03] transition-colors border-r border-black/[0.1]"
+                    >
+                      <svg
+                        className="w-3.5 h-3.5"
+                        viewBox="0 0 14 14"
+                        fill="none"
                       >
-                        <svg
-                          className="w-3.5 h-3.5"
-                          viewBox="0 0 14 14"
-                          fill="none"
-                        >
-                          <path
-                            d="M2 7h10"
-                            stroke="currentColor"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                          />
-                        </svg>
-                      </button>
-                      <div className="flex-1 flex items-center justify-center">
-                        <FiUsers className="w-3.5 h-3.5 text-[#bbb] mr-2" />
-                        <span className="text-[14px] font-medium text-black tracking-[-0.02em]">
-                          {travellers} {travellers === 1 ? "person" : "people"}
-                        </span>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() =>
-                          setTravellers(Math.min(20, travellers + 1))
-                        }
-                        className="w-11 h-full flex items-center justify-center text-[#888] hover:text-black hover:bg-black/[0.03] transition-colors border-l border-black/[0.1]"
+                        <path
+                          d="M2 7h10"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                        />
+                      </svg>
+                    </button>
+                    <div className="flex-1 flex items-center justify-center gap-2">
+                      <FiUsers className="w-3.5 h-3.5 text-[#bbb]" />
+                      <span className="text-[14px] font-medium text-black tracking-[-0.02em]">
+                        {travellers} {travellers === 1 ? "person" : "people"}
+                      </span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setTravellers(Math.min(20, travellers + 1))
+                      }
+                      className="w-11 h-full flex items-center justify-center text-[#888] hover:text-black hover:bg-black/[0.03] transition-colors border-l border-black/[0.1]"
+                    >
+                      <svg
+                        className="w-3.5 h-3.5"
+                        viewBox="0 0 12 12"
+                        fill="none"
                       >
-                        <svg
-                          className="w-3.5 h-3.5"
-                          viewBox="0 0 12 12"
-                          fill="none"
-                        >
-                          <path
-                            d="M6 2v8M2 6h8"
-                            stroke="currentColor"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                          />
-                        </svg>
-                      </button>
-                    </div>
-                  </Field>
-
-                  {/* Travel date */}
-                  <Field
-                    label="Preferred travel date"
-                    hint="We will confirm the exact date with you"
-                  >
-                    <div className="relative">
-                      <FiCalendar className="absolute left-3.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#bbb] pointer-events-none" />
-                      <input
-                        name="travelDate"
-                        required
-                        type="date"
-                        min={new Date().toISOString().split("T")[0]}
-                        className={`${inputClass} pl-10`}
-                      />
-                    </div>
-                  </Field>
+                        <path
+                          d="M6 2v8M2 6h8"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                  <span className={descClass}>
+                    ${dest.price.toLocaleString()} × {travellers} = $
+                    {totalPrice.toLocaleString()}
+                  </span>
                 </div>
 
-                {/* Special requests */}
-                <Field
-                  label="Special requests"
-                  hint="Dietary requirements, accessibility needs, room preferences etc."
-                >
-                  <div className="relative">
-                    <FiMessageSquare className="absolute left-3.5 top-3.5 w-3.5 h-3.5 text-[#bbb]" />
-                    <textarea
-                      name="specialRequests"
-                      rows={4}
-                      placeholder="Any special requirements or requests for your trip..."
-                      className="w-full px-3.5 py-3 pl-10 text-[13.5px] text-black tracking-[-0.01em] bg-white border border-black/[0.15] rounded-none outline-none focus:border-black transition-colors placeholder:text-[#bbb] resize-none leading-relaxed"
-                    />
-                  </div>
-                </Field>
+                {/* Travel date */}
+                <TextField name="travelDate" isRequired className="w-full">
+                  <Label className={labelClass}>Preferred travel date *</Label>
+                  <Input
+                    type="date"
+                    min={new Date().toISOString().split("T")[0]}
+                    className={inputClass}
+                  />
+                  <Description className={descClass}>
+                    We will confirm the exact date with you
+                  </Description>
+                  <FieldError className={errorClass} />
+                </TextField>
               </div>
+
+              {/* Special requests */}
+              <TextField name="specialRequests" className="w-full">
+                <Label className={labelClass}>Special requests</Label>
+                <TextArea
+                  placeholder="Dietary requirements, accessibility needs, room preferences..."
+                  className="w-full px-3.5 py-3 text-[13.5px] text-black tracking-[-0.01em] bg-white border border-black/[0.15] rounded-none outline-none focus:border-black transition-colors placeholder:text-[#bbb] resize-none leading-relaxed min-h-[100px]"
+                />
+                <Description className={descClass}>
+                  Optional — anything we should know about your trip
+                </Description>
+              </TextField>
             </div>
 
-            {/* Divider */}
             <div className="h-px bg-black/[0.06]" />
 
             {/* Notice */}
@@ -338,7 +295,7 @@ export default function BookingPage() {
                   No payment required now.
                 </span>{" "}
                 A Zondrift travel advisor will review your booking and contact
-                you within 24 hours to confirm availability and arrange payment.
+                you within 24 hours.
               </p>
             </div>
 
@@ -379,12 +336,11 @@ export default function BookingPage() {
                 </>
               )}
             </button>
-          </form>
+          </Form>
 
           {/* ── Right — Summary card ── */}
           <div className="hidden lg:block">
             <div className="sticky top-[72px] border border-black/[0.1] overflow-hidden">
-              {/* Destination image */}
               <div className="relative h-[180px] bg-black">
                 <Image
                   src={dest.image}
@@ -397,19 +353,18 @@ export default function BookingPage() {
               </div>
 
               <div className="p-5 flex flex-col gap-4">
-                {/* Destination info */}
                 <div>
                   <h3 className="text-[16px] font-medium tracking-[-0.03em] text-black mb-1">
                     {dest.name}
                   </h3>
-                  <div className="flex items-center gap-1.5">
+                  <div className="flex items-center gap-1.5 flex-wrap">
                     <FiMapPin className="w-3.5 h-3.5 text-[#aaa]" />
-                    <span className="text-[13px] text-[#888] tracking-[-0.01em]">
+                    <span className="text-[13px] text-[#888]">
                       {dest.country}
                     </span>
                     <span className="text-[#ddd]">·</span>
                     <FiClock className="w-3.5 h-3.5 text-[#aaa]" />
-                    <span className="text-[13px] text-[#888] tracking-[-0.01em]">
+                    <span className="text-[13px] text-[#888]">
                       {dest.duration}
                     </span>
                   </div>
@@ -417,41 +372,37 @@ export default function BookingPage() {
 
                 <div className="h-px bg-black/[0.06]" />
 
-                {/* Price breakdown */}
                 <div className="flex flex-col gap-2.5">
                   <div className="flex items-center justify-between">
-                    <span className="text-[13px] text-[#888] tracking-[-0.01em]">
+                    <span className="text-[13px] text-[#888]">
                       Price per person
                     </span>
-                    <span className="text-[13px] font-medium text-black tracking-[-0.02em]">
+                    <span className="text-[13px] font-medium text-black">
                       ${dest.price.toLocaleString()}
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-[13px] text-[#888] tracking-[-0.01em]">
-                      Travellers
-                    </span>
-                    <span className="text-[13px] font-medium text-black tracking-[-0.02em]">
+                    <span className="text-[13px] text-[#888]">Travellers</span>
+                    <span className="text-[13px] font-medium text-black">
                       × {travellers}
                     </span>
                   </div>
                   <div className="h-px bg-black/[0.06]" />
                   <div className="flex items-center justify-between">
-                    <span className="text-[13px] font-medium text-black tracking-[-0.01em]">
+                    <span className="text-[13px] font-medium text-black">
                       Total estimate
                     </span>
                     <span className="text-[20px] font-medium text-black tracking-[-0.04em]">
                       ${totalPrice.toLocaleString()}
                     </span>
                   </div>
-                  <span className="text-[11px] text-[#aaa] tracking-[-0.01em]">
+                  <span className="text-[11px] text-[#aaa]">
                     Final price confirmed by your advisor
                   </span>
                 </div>
 
                 <div className="h-px bg-black/[0.06]" />
 
-                {/* What's included */}
                 <div>
                   <p className="text-[11px] font-medium tracking-[0.08em] uppercase text-[#aaa] mb-3">
                     Included
@@ -460,7 +411,7 @@ export default function BookingPage() {
                     {dest.included.map((item, i) => (
                       <div key={i} className="flex items-start gap-2.5">
                         <FiCheck className="w-3.5 h-3.5 text-black/40 shrink-0 mt-0.5" />
-                        <span className="text-[12.5px] text-[#555] tracking-[-0.01em] leading-relaxed">
+                        <span className="text-[12.5px] text-[#555] leading-relaxed">
                           {item}
                         </span>
                       </div>
@@ -472,17 +423,15 @@ export default function BookingPage() {
           </div>
         </div>
 
-        {/* Mobile summary bar */}
+        {/* Mobile bottom bar */}
         <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-black/[0.08] px-5 py-4 flex items-center justify-between gap-4 z-40">
           <div>
-            <div className="text-[11px] text-[#aaa] tracking-[-0.01em]">
-              Total estimate
-            </div>
+            <div className="text-[11px] text-[#aaa]">Total estimate</div>
             <div className="text-[20px] font-medium tracking-[-0.04em] text-black">
               ${totalPrice.toLocaleString()}
             </div>
           </div>
-          <div className="text-[12px] text-[#888] tracking-[-0.01em]">
+          <div className="text-[12px] text-[#888]">
             {travellers} {travellers === 1 ? "person" : "people"} ·{" "}
             {dest.duration}
           </div>

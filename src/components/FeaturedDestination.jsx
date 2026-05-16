@@ -43,7 +43,7 @@ export default async function FeaturedDestinations() {
           {destinations.slice(0, 6).map((dest) => (
             <div
               key={dest._id}
-              className="group relative rounded-2xl overflow-hidden bg-black block"
+              className="group relative rounded-md overflow-hidden bg-black block"
             >
               {/* Image */}
               <div className="relative h-[280px] w-full overflow-hidden">

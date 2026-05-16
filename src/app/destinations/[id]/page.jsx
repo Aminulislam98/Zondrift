@@ -89,7 +89,7 @@ export default async function DestinationDetailPage({ params }) {
               <div className="flex items-center gap-1.5">
                 <FiUsers className="w-3 h-3 text-white/60" />
                 <span className="text-[14px] text-white/60 tracking-[-0.01em]">
-                  {dest.trips.toLocaleString()} trips planned
+                  {dest?.trips?.toLocaleString()} trips planned
                 </span>
               </div>
             </div>
@@ -225,7 +225,7 @@ export default async function DestinationDetailPage({ params }) {
                   <span className="text-[#ddd]">·</span>
                   <FiUsers className="w-3 h-3 text-[#aaa]" />
                   <span className="text-[13px] text-[#aaa] tracking-[-0.01em]">
-                    {dest.trips.toLocaleString()} trips
+                    {dest?.trips?.toLocaleString()} trips
                   </span>
                 </div>
               </div>

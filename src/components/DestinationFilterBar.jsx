@@ -49,7 +49,7 @@ const DestinationFilterBar = () => {
             <select
               value={filter.value}
               onChange={(e) => filter.setter(e.target.value)}
-              className="w-full appearance-none bg-white border border-black/[0.12] rounded-xl px-4 py-3.5 text-[13px] tracking-[0.04em] uppercase font-medium outline-none hover:border-black/25 transition-colors cursor-pointer pr-10 text-[#555]"
+              className="w-full appearance-none bg-white border border-black/[0.12] rounded-md px-4 py-3.5 text-[13px] tracking-[0.04em] uppercase font-medium outline-none hover:border-black/25 transition-colors cursor-pointer pr-10 text-[#555]"
             >
               <option value="">{filter.placeholder}</option>
               {filter.options.map((opt) => (

@@ -1,14 +1,6 @@
-import AllDestinationAdmin from "@/components/AllDestinationAdmin";
-import Image from "next/image";
+import DestinationAdminCard from "@/components/AllDestinationAdmin";
 import Link from "next/link";
-import {
-  FiEdit2,
-  FiTrash2,
-  FiPlus,
-  FiMapPin,
-  FiStar,
-  FiClock,
-} from "react-icons/fi";
+import { FiPlus, FiMapPin } from "react-icons/fi";
 
 export default async function AdminDestinationsPage() {
   const res = await fetch("http://localhost:4000/destination");
@@ -37,7 +29,7 @@ export default async function AdminDestinationsPage() {
             </p>
           </div>
           <Link
-            href="/admin/add-destination"
+            href="/addDestination"
             className="flex items-center gap-2 bg-black text-white text-[13px] font-medium tracking-[-0.01em] px-5 py-2.5 hover:bg-black/80 transition-colors"
           >
             <FiPlus className="w-4 h-4" />
@@ -70,10 +62,10 @@ export default async function AdminDestinationsPage() {
         {/* ── Destination rows ── */}
         <div className="flex flex-col divide-y divide-black/[0.05]">
           {destinations.map((dest) => (
-            <AllDestinationAdmin
+            <DestinationAdminCard
               key={dest._id}
               dest={dest}
-            ></AllDestinationAdmin>
+            ></DestinationAdminCard>
           ))}
         </div>
 

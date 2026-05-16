@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 // ── swap these manually while practicing ──
-const isLoggedIn = true;
+const isLoggedIn = false;
 const mockUser = {
   name: "Aminul",
   initials: "AI",
@@ -195,7 +195,7 @@ export default function Navbar() {
                 Log in
               </Link>
               <Link
-                href="/signup"
+                href="/register"
                 className={`text-[13px] tracking-[-0.01em] px-4 py-1.5 rounded-full transition-all duration-300 ${
                   scrolled
                     ? "bg-black text-white hover:bg-black/80"

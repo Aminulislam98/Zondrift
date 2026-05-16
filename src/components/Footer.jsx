@@ -12,14 +12,14 @@ const footerLinks = {
   Account: [
     { label: "Profile", href: "/profile" },
     { label: "Login", href: "/login" },
-    { label: "Sign Up", href: "/signup" },
+    { label: "Sign Up", href: "/register" },
     { label: "Admin", href: "/admin" },
   ],
   Company: [
     { label: "About", href: "/about" },
-    { label: "Contact", href: "/contact" },
-    { label: "Privacy Policy", href: "/privacy" },
-    { label: "Terms of Service", href: "/terms" },
+    { label: "Contact", href: "/s" },
+    { label: "Privacy Policy", href: "/as" },
+    { label: "Terms of Service", href: "/a" },
   ],
 };
 

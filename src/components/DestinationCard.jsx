@@ -7,7 +7,7 @@ const DestinationCard = ({ dest }) => {
   const [saved, setSaved] = useState(false);
 
   return (
-    <div className="group flex flex-col bg-white rounded-2xl border border-black/[0.07] overflow-hidden hover:border-black/[0.14] transition-all duration-300">
+    <div className="group flex flex-col bg-white rounded-md  border border-black/[0.07] overflow-hidden hover:border-black/[0.14] transition-all duration-300">
       {/* ── Image ── */}
       <div className="relative h-[210px] overflow-hidden bg-black">
         <Image

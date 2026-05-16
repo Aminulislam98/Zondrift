@@ -1,133 +1,121 @@
-"use client";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
-import { FiClock, FiEdit2, FiMapPin, FiStar, FiTrash2 } from "react-icons/fi";
+import { FiEdit2, FiMapPin, FiStar, FiTrash2 } from "react-icons/fi";
+import { DeleteDestination } from "./buttons/DeleteDestination";
 
-const AllDestinationAdmin = ({ dest }) => {
+const DestinationAdminCard = ({ dest }) => {
   return (
-    <div>
-      <div key={dest._id}>
-        {/* Desktop row */}
-        <div className="hidden md:grid grid-cols-[64px_1fr_120px_100px_100px_120px] gap-4 items-center px-4 py-4 hover:bg-black/[0.02] transition-colors">
-          {/* Photo */}
-          <div className="relative w-14 h-14 overflow-hidden bg-black/[0.05] shrink-0">
-            <Image
-              src={dest.image}
-              alt={dest.name}
-              fill
-              quality={70}
-              className="object-cover"
-            />
-          </div>
+    <>
+      {/* ── Desktop — matches header grid exactly ── */}
+      {/* header: grid-cols-[64px_1fr_120px_100px_100px_120px] gap-4 px-4 */}
+      <div className="hidden md:grid grid-cols-[64px_1fr_120px_100px_100px_120px] gap-4 px-4 py-3.5 hover:bg-black/[0.02] transition-colors group">
+        {/* Photo — 64px */}
+        <div className="relative w-[64px] h-11 shrink-0 overflow-hidden bg-black/[0.05]">
+          <Image
+            src={dest.image}
+            alt={dest.name}
+            fill
+            quality={70}
+            className="object-cover group-hover:scale-105 transition-transform duration-500"
+          />
+        </div>
 
-          {/* Name + details */}
-          <div className="flex flex-col gap-0.5 min-w-0">
-            <span className="text-[14px] font-medium text-black tracking-[-0.02em] truncate">
-              {dest.name}
+        {/* Destination — 1fr */}
+        <div className="flex flex-col gap-0.5 min-w-0 justify-center">
+          <span className="text-[13.5px] font-medium text-black tracking-[-0.02em] truncate">
+            {dest.name}
+          </span>
+          <div className="flex items-center gap-1.5">
+            <FiMapPin className="w-3 h-3 text-[#ccc] shrink-0" />
+            <span className="text-[12px] text-[#999] tracking-[-0.01em]">
+              {dest.country}
             </span>
-            <div className="flex items-center gap-1.5">
-              <FiMapPin className="w-3 h-3 text-[#aaa] shrink-0" />
-              <span className="text-[12px] text-[#aaa] tracking-[-0.01em]">
-                {dest.country}
-              </span>
-              <span className="text-[#ddd]">·</span>
-              <FiClock className="w-3 h-3 text-[#aaa] shrink-0" />
-              <span className="text-[12px] text-[#aaa] tracking-[-0.01em]">
-                {dest.duration}
-              </span>
-            </div>
           </div>
+        </div>
 
-          {/* Category */}
-          <span className="text-[11px] font-medium tracking-[0.06em] uppercase text-[#555] bg-black/[0.04] px-2.5 py-1 w-fit">
+        {/* Category — 120px */}
+        <div className="flex items-center">
+          <span className="text-[11px] font-medium tracking-[0.06em] uppercase text-[#999] bg-black/[0.04] px-2 py-0.5 whitespace-nowrap">
             {dest.category}
           </span>
+        </div>
 
-          {/* Price */}
-          <span className="text-[14px] font-medium text-black tracking-[-0.02em]">
+        {/* Price — 100px */}
+        <div className="flex items-center">
+          <span className="text-[13.5px] font-medium text-black tracking-[-0.02em] whitespace-nowrap">
             ${dest.price.toLocaleString()}
           </span>
-
-          {/* Rating */}
-          <div className="flex items-center gap-1.5">
-            <FiStar className="w-3 h-3 text-black" />
-            <span className="text-[14px] font-medium text-black tracking-[-0.02em]">
-              {dest.rating}
-            </span>
-          </div>
-
-          {/* Actions */}
-          <div className="flex items-center gap-2 justify-end">
-            <Link
-              href={`/admin/edit-destination/${dest._id}`}
-              className="flex items-center gap-1.5 text-[12px] text-[#555] tracking-[-0.01em] border border-black/[0.12] px-3 py-1.5 hover:border-black/25 hover:text-black transition-all"
-            >
-              <FiEdit2 className="w-3.5 h-3.5" />
-              Edit
-            </Link>
-            <button
-              onClick={() => handleDelete(dest._id)}
-              className="flex items-center gap-1.5 text-[12px] text-[#aaa] tracking-[-0.01em] border border-black/[0.08] px-3 py-1.5 hover:border-red-200 hover:text-red-500 transition-all"
-            >
-              <FiTrash2 className="w-3.5 h-3.5" />
-              Delete
-            </button>
-          </div>
         </div>
 
-        {/* Mobile card */}
-        <div className="md:hidden flex items-start gap-4 py-4">
-          <div className="relative w-16 h-16 overflow-hidden bg-black/[0.05] shrink-0">
-            <Image
-              src={dest.image}
-              alt={dest.name}
-              fill
-              quality={70}
-              className="object-cover"
-            />
-          </div>
-          <div className="flex flex-col gap-1 flex-1 min-w-0">
-            <span className="text-[14px] font-medium text-black tracking-[-0.02em] truncate">
-              {dest.name}
-            </span>
-            <div className="flex items-center gap-1.5">
-              <FiMapPin className="w-3 h-3 text-[#aaa]" />
-              <span className="text-[12px] text-[#aaa]">{dest.country}</span>
-              <span className="text-[#ddd]">·</span>
-              <FiStar className="w-3 h-3 text-[#aaa]" />
-              <span className="text-[12px] text-[#aaa]">{dest.rating}</span>
-            </div>
-            <div className="flex items-center gap-1.5 mt-0.5">
-              <span className="text-[12px] font-medium text-black">
-                ${dest.price.toLocaleString()}
-              </span>
-              <span className="text-[#ddd]">·</span>
-              <span className="text-[11px] text-[#555] bg-black/[0.04] px-2 py-0.5 uppercase tracking-[0.06em]">
-                {dest.category}
-              </span>
-            </div>
-            <div className="flex items-center gap-2 mt-2">
-              <Link
-                href={`/admin/edit-destination/${dest._id}`}
-                className="flex items-center gap-1.5 text-[12px] text-[#555] border border-black/[0.12] px-3 py-1.5 hover:text-black transition-colors"
-              >
-                <FiEdit2 className="w-3.5 h-3.5" />
-                Edit
-              </Link>
-              <button
-                onClick={() => handleDelete(dest._id)}
-                className="flex items-center gap-1.5 text-[12px] text-[#aaa] border border-black/[0.08] px-3 py-1.5 hover:text-red-500 hover:border-red-200 transition-colors"
-              >
-                <FiTrash2 className="w-3.5 h-3.5" />
-                Delete
-              </button>
-            </div>
-          </div>
+        {/* Rating — 100px */}
+        <div className="flex items-center gap-1.5">
+          <FiStar className="w-3 h-3 text-[#999]" />
+          <span className="text-[13px] text-[#999] tracking-[-0.01em]">
+            {dest.rating}
+          </span>
+        </div>
+
+        {/* Actions — 120px */}
+        <div className="flex flex-col items-center justify-end gap-1.5">
+          <Link
+            href={`/admin/edit-destination/${dest._id}`}
+            className="flex items-center justify-center gap-1.5 text-[12px] text-[#555] tracking-[-0.01em] border border-black/10 w-full py-2 hover:border-black/25 hover:text-black transition-all whitespace-nowrap"
+          >
+            <FiEdit2 className="w-3 h-3" />
+            Edit
+          </Link>
+          <DeleteDestination dest={dest} />
         </div>
       </div>
-    </div>
+
+      {/* ── Mobile — simple clean row ── */}
+      <div className="md:hidden flex items-center gap-3 px-4 py-3.5 hover:bg-black/[0.02] transition-colors group">
+        {/* Thumbnail */}
+        <div className="relative w-12 h-10 shrink-0 overflow-hidden bg-black/[0.05]">
+          <Image
+            src={dest.image}
+            alt={dest.name}
+            fill
+            quality={70}
+            className="object-cover group-hover:scale-105 transition-transform duration-500"
+          />
+        </div>
+
+        {/* Name + meta */}
+        <div className="flex flex-col gap-0.5 flex-1 min-w-0">
+          <span className="text-[13.5px] font-medium text-black tracking-[-0.02em] truncate">
+            {dest.name}
+          </span>
+          <div className="flex items-center gap-1.5">
+            <FiMapPin className="w-3 h-3 text-[#ccc] shrink-0" />
+            <span className="text-[12px] text-[#999]">{dest.country}</span>
+            <span className="text-[#e8e8e8]">·</span>
+            {/* <span className="text-[11px] font-medium tracking-[0.06em] uppercase text-[#999] bg-black/[0.04] px-1.5 py-0.5 whitespace-nowrap">
+              {dest.category}
+            </span> */}
+          </div>
+        </div>
+
+        {/* Price */}
+        <span className="text-[13px] font-medium text-black tracking-[-0.02em] whitespace-nowrap shrink-0">
+          ${dest.price.toLocaleString()}
+        </span>
+
+        {/* Actions */}
+        <div className="flex flex-col items-center gap-1.5 shrink-0">
+          <Link
+            href={`/admin/edit-destination/${dest._id}`}
+            className="flex items-center  justify-center
+             gap-1 text-[12px] text-[#555] border border-black/[0.1] w-full py-1.5 hover:text-black transition-all"
+          >
+            <FiEdit2 className="w-3 h-3" />
+            Edit
+          </Link>
+          <DeleteDestination dest={dest} />
+        </div>
+      </div>
+    </>
   );
 };
 
-export default AllDestinationAdmin;
+export default DestinationAdminCard;

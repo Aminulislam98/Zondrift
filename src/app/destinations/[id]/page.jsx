@@ -278,7 +278,7 @@ export default async function DestinationDetailPage({ params }) {
 
               {/* Book now */}
               <Link
-                href={`/bookings/new?destination=${dest._id}`}
+                href={`/bookings/new/${dest._id}`}
                 className="w-full bg-black text-white text-[13.5px] font-medium tracking-[-0.01em] py-3.5 flex items-center justify-center gap-2 hover:bg-black/80 transition-colors"
               >
                 Book now
@@ -311,7 +311,7 @@ export default async function DestinationDetailPage({ params }) {
           </div>
         </div>
         <Link
-          href={`/bookings/new?destination=${dest._id}`}
+          href={`/bookings/new/${dest._id}`}
           className="bg-black text-white text-[13.5px] font-medium tracking-[-0.01em] px-7 py-3 hover:bg-black/80 transition-colors flex items-center gap-2"
         >
           Book now

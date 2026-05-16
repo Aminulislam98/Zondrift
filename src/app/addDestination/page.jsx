@@ -33,11 +33,19 @@ const selectTriggerClass =
 export default function AddDestinationPage() {
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const form = new FormData(e.currentTarget);
     const addDestinationData = Object.fromEntries(form.entries());
-    console.log("this is form data:", { addDestinationData });
+    const res = await fetch("http://localhost:4000/destination", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(addDestinationData),
+    });
+    const data = await res.json();
+    console.log("this is data that has been sent to mongodb : ", { data });
 
     // this submitted will show info about is successful or not about publishing
     setSubmitted(true);

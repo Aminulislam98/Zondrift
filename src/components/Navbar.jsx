@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 // ── swap these manually while practicing ──
 const isLoggedIn = true;
@@ -20,16 +21,38 @@ const navLinks = [
 ];
 
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
+
+  // only home page gets the transparent → white scroll effect
+  // every other page starts white immediately
+  const isHeroPage = pathname === "/";
+
+  const [scrolled, setScrolled] = useState(!isHeroPage);
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
+  // scroll listener — only runs on home page
   useEffect(() => {
+    // on non-hero pages always keep white
+    if (!isHeroPage) {
+      setScrolled(true);
+      return;
+    }
+
+    // on home page listen to scroll
     const handleScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [isHeroPage]);
 
+  // reset scrolled state when route changes
+  useEffect(() => {
+    setScrolled(!isHeroPage);
+    setMenuOpen(false);
+    setDropdownOpen(false);
+  }, [pathname, isHeroPage]);
+
+  // close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (!e.target.closest("#profile-dropdown")) setDropdownOpen(false);
@@ -64,9 +87,13 @@ export default function Navbar() {
               key={link.href}
               href={link.href}
               className={`text-[13px] tracking-[-0.01em] px-3 py-1.5 rounded-lg transition-colors duration-200 ${
-                scrolled
-                  ? "text-[#555] hover:text-black hover:bg-black/[0.04]"
-                  : "text-white/70 hover:text-white hover:bg-white/10"
+                pathname === link.href
+                  ? scrolled
+                    ? "text-black font-medium"
+                    : "text-white font-medium"
+                  : scrolled
+                    ? "text-[#555] hover:text-black hover:bg-black/[0.04]"
+                    : "text-white/70 hover:text-white hover:bg-white/10"
               }`}
             >
               {link.label}
@@ -117,6 +144,7 @@ export default function Navbar() {
                 </svg>
               </button>
 
+              {/* Dropdown */}
               {dropdownOpen && (
                 <div className="absolute right-0 top-[calc(100%+8px)] w-44 bg-white border border-black/[0.08] rounded-2xl shadow-[0_8px_24px_rgba(0,0,0,0.08)] overflow-hidden">
                   <div className="p-1.5">
@@ -215,7 +243,11 @@ export default function Navbar() {
             <Link
               key={link.href}
               href={link.href}
-              className="flex items-center justify-between px-3 py-3 text-[15px] text-[#555] rounded-xl hover:bg-black/[0.04] hover:text-black transition-colors"
+              className={`flex items-center justify-between px-3 py-3 text-[15px] rounded-xl transition-colors ${
+                pathname === link.href
+                  ? "text-black font-medium bg-black/[0.04]"
+                  : "text-[#555] hover:bg-black/[0.04] hover:text-black"
+              }`}
               onClick={() => setMenuOpen(false)}
             >
               {link.label}

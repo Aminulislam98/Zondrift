@@ -34,7 +34,6 @@ export default async function DestinationDetailPage({ params }) {
   const { id } = await params;
   const res = await fetch(`http://localhost:4000/destination/${id}`);
   const dest = await res.json();
-  console.log("this is dest form res:", dest);
   return (
     <main className="min-h-screen bg-white">
       {/* ── Hero ── */}

@@ -2,98 +2,79 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import {
+  FiArrowLeft,
+  FiMapPin,
+  FiStar,
+  FiCheck,
+  FiX,
+  FiArrowUpRight,
+  FiHeart,
+  FiThermometer,
+  FiClock,
+  FiTag,
+  FiUsers,
+} from "react-icons/fi";
 
-// ── Hardcoded — replace with MongoDB fetch later ──
-// Real app: const dest = await fetch(`/api/destinations/${params.id}`)
+// ── Hardcoded for now — replace with MongoDB fetch ──
+// Real: const res = await fetch(`http://localhost:4000/destination/${params.id}`)
+// Real: const dest = await res.json()
 const dest = {
   _id: "1",
-  name: "Bali Paradise",
-  country: "Indonesia",
-  category: "Beach",
-  style: "Couple",
-  tagline: "Where gods meet the ocean",
+  name: "Kyoto Serenity",
+  country: "Japan",
+  category: "Culture",
+  style: "Solo",
+  tagline: "Temples, bamboo groves and timeless tradition",
   image:
-    "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=1600&auto=format&fit=crop&q=85",
+    "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=1600&auto=format&fit=crop&q=85",
   rating: 4.9,
-  price: 2700,
-  duration: "7 Days / 6 Nights",
-  temp: "28°C",
-  trips: 2400,
+  price: 2800,
+  duration: "6 Days / 5 Nights",
+  temp: "17°C",
+  trips: 2100,
   priceRange: "Mid",
   shortDescription:
-    "Tropical temples, lush rice fields and ocean sunsets. Bali is pure magic for every kind of traveller.",
+    "Ancient temples, traditional tea houses and the world famous Arashiyama bamboo grove. Kyoto is the cultural soul of Japan.",
   description:
-    "Bali is a living postcard — an Indonesian paradise that feels like a fantasy. The island offers an extraordinary mix of lush jungle, ancient temples, terraced rice paddies, and white sand beaches. Whether you're exploring the spiritual town of Ubud, surfing the waves of Seminyak, or watching the sun dip below the horizon at Tanah Lot temple, every moment in Bali feels like a scene from a dream. The local culture is deeply rooted in Hinduism, making it unlike any other part of Indonesia. You'll encounter elaborate ceremonies, intricate offerings, and the warmth of the Balinese people at every turn.",
+    "Kyoto is the cultural heart of Japan and one of the most beautiful cities in the world. Once the imperial capital for over a thousand years, Kyoto is home to more than 1,600 Buddhist temples, 400 Shinto shrines, and some of the best preserved traditional architecture in all of Asia. Wander through the iconic vermillion torii gates of Fushimi Inari, stroll the lantern-lit streets of the Gion geisha district after dark, and lose yourself in the ethereal beauty of the Arashiyama bamboo grove at sunrise.",
   highlights: [
-    "Visit the iconic Tanah Lot sea temple at sunset",
-    "Explore the terraced rice fields of Tegallalang",
-    "Snorkel in the crystal-clear waters of Nusa Penida",
-    "Experience a traditional Kecak fire dance performance",
-    "Wander through the spiritual town of Ubud",
-    "Surf the famous waves of Kuta and Seminyak",
+    "Walk through the famous Arashiyama bamboo grove",
+    "Visit Fushimi Inari shrine and its thousand torii gates",
+    "Experience a traditional Japanese tea ceremony",
+    "Explore the historic Gion geisha district at dusk",
+    "See the golden Kinkaku-ji temple reflecting in the pond",
   ],
   included: [
     "Return flights from London",
-    "7 nights accommodation — 4 star resort",
+    "5 nights accommodation in a traditional ryokan",
     "Daily breakfast included",
     "Airport transfers on arrival and departure",
-    "Guided temple tour on day 2",
+    "Guided walking tour of Gion district",
     "24/7 Zondrift support throughout your trip",
   ],
   notIncluded: [
     "Travel insurance",
-    "Personal spending and meals",
-    "Optional excursions and activities",
+    "Personal spending and shopping",
+    "Optional day trips to Nara or Osaka",
     "Visa fees if applicable",
   ],
 };
+// ───────────────────────────────────────────────────
 
-function StatPill({ label, value }) {
+function StatPill({ icon, label, value }) {
   return (
-    <div className="flex flex-col gap-1 px-5 py-4 border-r border-black/[0.08] flex-1 min-w-[120px] last:border-r-0">
-      <span className="text-[11px] font-medium tracking-[0.08em] uppercase text-[#aaa]">
-        {label}
-      </span>
-      <span className="text-[15px] font-medium tracking-[-0.03em] text-black">
+    <div className="flex flex-col gap-1.5 px-4 py-5">
+      <div className="flex items-center gap-1.5">
+        <span className="text-[#bbb]">{icon}</span>
+        <span className="text-[11px] font-medium tracking-[0.08em] uppercase text-[#aaa]">
+          {label}
+        </span>
+      </div>
+      <span className="text-[14px] md:text-[15px] font-medium tracking-[-0.03em] text-black">
         {value}
       </span>
     </div>
-  );
-}
-
-function CheckIcon() {
-  return (
-    <svg className="w-4 h-4 shrink-0 mt-0.5" viewBox="0 0 16 16" fill="none">
-      <circle
-        cx="8"
-        cy="8"
-        r="7"
-        stroke="black"
-        strokeWidth="1.2"
-        opacity="0.25"
-      />
-      <path
-        d="M5 8l2 2 4-4"
-        stroke="black"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-function CrossIcon() {
-  return (
-    <svg className="w-4 h-4 shrink-0 mt-0.5" viewBox="0 0 16 16" fill="none">
-      <circle cx="8" cy="8" r="7" stroke="#ccc" strokeWidth="1.2" />
-      <path
-        d="M5.5 10.5l5-5M10.5 10.5l-5-5"
-        stroke="#ccc"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-      />
-    </svg>
   );
 }
 
@@ -112,20 +93,12 @@ export default function DestinationDetailPage({ params }) {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-transparent" />
 
-        {/* Back */}
+        {/* Back button */}
         <Link
           href="/destinations"
           className="absolute top-[68px] left-5 md:left-10 flex items-center gap-2 text-[13px] text-white/80 hover:text-white transition-colors bg-black/20 backdrop-blur-sm border border-white/15 px-3.5 py-2 rounded-full"
         >
-          <svg className="w-3.5 h-3.5" viewBox="0 0 14 14" fill="none">
-            <path
-              d="M9 2L4 7l5 5"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+          <FiArrowLeft className="w-3.5 h-3.5" />
           All destinations
         </Link>
 
@@ -145,42 +118,25 @@ export default function DestinationDetailPage({ params }) {
             </h1>
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
               <div className="flex items-center gap-1.5">
-                <svg
-                  className="w-3.5 h-3.5 text-white/50"
-                  viewBox="0 0 14 14"
-                  fill="none"
-                >
-                  <path
-                    d="M7 1C4.79 1 3 2.79 3 5c0 3.25 4 8 4 8s4-4.75 4-8c0-2.21-1.79-4-4-4z"
-                    stroke="currentColor"
-                    strokeWidth="1.2"
-                    strokeLinejoin="round"
-                  />
-                  <circle
-                    cx="7"
-                    cy="5"
-                    r="1.2"
-                    stroke="currentColor"
-                    strokeWidth="1.2"
-                  />
-                </svg>
+                <FiMapPin className="w-3.5 h-3.5 text-white/50" />
                 <span className="text-[14px] text-white/60 tracking-[-0.01em]">
                   {dest.country}
                 </span>
               </div>
               <span className="text-white/20">·</span>
-              <div className="flex items-center gap-1">
-                <svg className="w-3 h-3 fill-white/70" viewBox="0 0 12 12">
-                  <path d="M6 1l1.5 3 3.3.5-2.4 2.3.6 3.2L6 8.5l-3 1.5.6-3.2L1.2 4.5l3.3-.5z" />
-                </svg>
+              <div className="flex items-center gap-1.5">
+                <FiStar className="w-3 h-3 text-white/60" />
                 <span className="text-[14px] text-white/60 tracking-[-0.01em]">
                   {dest.rating} rating
                 </span>
               </div>
               <span className="text-white/20">·</span>
-              <span className="text-[14px] text-white/60 tracking-[-0.01em]">
-                {dest.trips.toLocaleString()} trips planned
-              </span>
+              <div className="flex items-center gap-1.5">
+                <FiUsers className="w-3 h-3 text-white/60" />
+                <span className="text-[14px] text-white/60 tracking-[-0.01em]">
+                  {dest.trips.toLocaleString()} trips planned
+                </span>
+              </div>
             </div>
           </div>
         </div>
@@ -189,14 +145,27 @@ export default function DestinationDetailPage({ params }) {
       {/* ── Stats bar ── */}
       <div className="border-b border-black/[0.08]">
         <div className="max-w-5xl mx-auto px-5 md:px-10">
-          <div className="flex overflow-x-auto border-l border-black/[0.08]">
+          <div className="grid grid-cols-2 md:grid-cols-4 ">
             <StatPill
+              icon={<FiTag className="w-3.5 h-3.5" />}
               label="Price"
               value={`$${dest.price.toLocaleString()}/person`}
             />
-            <StatPill label="Duration" value={dest.duration} />
-            <StatPill label="Temperature" value={dest.temp} />
-            <StatPill label="Price range" value={dest.priceRange} />
+            <StatPill
+              icon={<FiClock className="w-3.5 h-3.5" />}
+              label="Duration"
+              value={dest.duration}
+            />
+            <StatPill
+              icon={<FiThermometer className="w-3.5 h-3.5" />}
+              label="Temperature"
+              value={dest.temp}
+            />
+            <StatPill
+              icon={<FiTag className="w-3.5 h-3.5" />}
+              label="Price range"
+              value={dest.priceRange}
+            />
           </div>
         </div>
       </div>
@@ -220,56 +189,64 @@ export default function DestinationDetailPage({ params }) {
             </div>
 
             {/* Highlights */}
-            <div>
-              <span className="text-[11px] font-medium tracking-[0.12em] uppercase text-[#aaa] block mb-5">
-                Highlights
-              </span>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {dest.highlights.map((item, i) => (
-                  <div key={i} className="flex items-start gap-3">
-                    <CheckIcon />
-                    <span className="text-[14px] text-[#333] tracking-[-0.01em] leading-relaxed">
-                      {item}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* What's included */}
-            <div>
-              <span className="text-[11px] font-medium tracking-[0.12em] uppercase text-[#aaa] block mb-5">
-                What's included
-              </span>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-                <div className="flex flex-col gap-3.5">
-                  <p className="text-[12px] font-medium tracking-[0.06em] uppercase text-black mb-1">
-                    Included
-                  </p>
-                  {dest.included.map((item, i) => (
+            {dest.highlights?.length > 0 && (
+              <div>
+                <span className="text-[11px] font-medium tracking-[0.12em] uppercase text-[#aaa] block mb-5">
+                  Highlights
+                </span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {dest.highlights.map((item, i) => (
                     <div key={i} className="flex items-start gap-3">
-                      <CheckIcon />
+                      <FiCheck className="w-4 h-4 shrink-0 mt-0.5 text-black/40" />
                       <span className="text-[14px] text-[#333] tracking-[-0.01em] leading-relaxed">
                         {item}
                       </span>
                     </div>
                   ))}
                 </div>
-                <div className="flex flex-col gap-3.5">
-                  <p className="text-[12px] font-medium tracking-[0.06em] uppercase text-[#aaa] mb-1">
-                    Not included
-                  </p>
-                  {dest.notIncluded.map((item, i) => (
-                    <div key={i} className="flex items-start gap-3">
-                      <CrossIcon />
-                      <span className="text-[14px] text-[#aaa] tracking-[-0.01em] leading-relaxed">
-                        {item}
-                      </span>
+              </div>
+            )}
+
+            {/* What's included */}
+            {(dest.included?.length > 0 || dest.notIncluded?.length > 0) && (
+              <div>
+                <span className="text-[11px] font-medium tracking-[0.12em] uppercase text-[#aaa] block mb-5">
+                  What's included
+                </span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                  {dest.included?.length > 0 && (
+                    <div className="flex flex-col gap-3.5">
+                      <p className="text-[12px] font-medium tracking-[0.06em] uppercase text-black mb-1">
+                        Included
+                      </p>
+                      {dest.included.map((item, i) => (
+                        <div key={i} className="flex items-start gap-3">
+                          <FiCheck className="w-4 h-4 shrink-0 mt-0.5 text-black/40" />
+                          <span className="text-[14px] text-[#333] tracking-[-0.01em] leading-relaxed">
+                            {item}
+                          </span>
+                        </div>
+                      ))}
                     </div>
-                  ))}
+                  )}
+                  {dest.notIncluded?.length > 0 && (
+                    <div className="flex flex-col gap-3.5">
+                      <p className="text-[12px] font-medium tracking-[0.06em] uppercase text-[#aaa] mb-1">
+                        Not included
+                      </p>
+                      {dest.notIncluded.map((item, i) => (
+                        <div key={i} className="flex items-start gap-3">
+                          <FiX className="w-4 h-4 shrink-0 mt-0.5 text-[#ccc]" />
+                          <span className="text-[14px] text-[#aaa] tracking-[-0.01em] leading-relaxed">
+                            {item}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
-            </div>
+            )}
           </div>
 
           {/* ── Right — Booking card ── */}
@@ -286,13 +263,12 @@ export default function DestinationDetailPage({ params }) {
                   </span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <svg className="w-3 h-3 fill-black" viewBox="0 0 12 12">
-                    <path d="M6 1l1.5 3 3.3.5-2.4 2.3.6 3.2L6 8.5l-3 1.5.6-3.2L1.2 4.5l3.3-.5z" />
-                  </svg>
+                  <FiStar className="w-3 h-3 text-black" />
                   <span className="text-[13px] font-medium text-black tracking-[-0.01em]">
                     {dest.rating}
                   </span>
                   <span className="text-[#ddd]">·</span>
+                  <FiUsers className="w-3 h-3 text-[#aaa]" />
                   <span className="text-[13px] text-[#aaa] tracking-[-0.01em]">
                     {dest.trips.toLocaleString()} trips
                   </span>
@@ -304,18 +280,37 @@ export default function DestinationDetailPage({ params }) {
               {/* Details */}
               <div className="flex flex-col gap-3">
                 {[
-                  { label: "Duration", value: dest.duration },
-                  { label: "Temperature", value: dest.temp },
-                  { label: "Category", value: dest.category },
-                  { label: "Best for", value: dest.style },
+                  {
+                    icon: <FiClock className="w-3.5 h-3.5 text-[#bbb]" />,
+                    label: "Duration",
+                    value: dest.duration,
+                  },
+                  {
+                    icon: <FiThermometer className="w-3.5 h-3.5 text-[#bbb]" />,
+                    label: "Temperature",
+                    value: dest.temp,
+                  },
+                  {
+                    icon: <FiTag className="w-3.5 h-3.5 text-[#bbb]" />,
+                    label: "Category",
+                    value: dest.category,
+                  },
+                  {
+                    icon: <FiUsers className="w-3.5 h-3.5 text-[#bbb]" />,
+                    label: "Best for",
+                    value: dest.style,
+                  },
                 ].map((item) => (
                   <div
                     key={item.label}
                     className="flex items-center justify-between"
                   >
-                    <span className="text-[13px] text-[#888] tracking-[-0.01em]">
-                      {item.label}
-                    </span>
+                    <div className="flex items-center gap-2">
+                      {item.icon}
+                      <span className="text-[13px] text-[#888] tracking-[-0.01em]">
+                        {item.label}
+                      </span>
+                    </div>
                     <span className="text-[13px] font-medium text-black tracking-[-0.01em]">
                       {item.value}
                     </span>
@@ -331,15 +326,7 @@ export default function DestinationDetailPage({ params }) {
                 className="w-full bg-black text-white text-[13.5px] font-medium tracking-[-0.01em] py-3.5 flex items-center justify-center gap-2 hover:bg-black/80 transition-colors"
               >
                 Book now
-                <svg className="w-3.5 h-3.5" viewBox="0 0 14 14" fill="none">
-                  <path
-                    d="M2 12L12 2M5 2h7v7"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
+                <FiArrowUpRight className="w-4 h-4" />
               </Link>
 
               <p className="text-[11.5px] text-[#bbb] tracking-[-0.01em] text-center leading-relaxed">
@@ -349,18 +336,7 @@ export default function DestinationDetailPage({ params }) {
 
               {/* Save */}
               <button className="w-full border border-black/[0.1] text-[#555] text-[13px] tracking-[-0.01em] py-2.5 hover:border-black/25 hover:text-black transition-all flex items-center justify-center gap-2">
-                <svg
-                  className="w-4 h-4"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                >
-                  <path
-                    d="M8 13.5l-5.5-5a3.5 3.5 0 0 1 5.5-4.4A3.5 3.5 0 0 1 13.5 8.5L8 13.5z"
-                    strokeLinejoin="round"
-                  />
-                </svg>
+                <FiHeart className="w-4 h-4" />
                 Save to wishlist
               </button>
             </div>
@@ -380,9 +356,10 @@ export default function DestinationDetailPage({ params }) {
         </div>
         <Link
           href={`/bookings/new?destination=${dest._id}`}
-          className="bg-black text-white text-[13.5px] font-medium tracking-[-0.01em] px-7 py-3 hover:bg-black/80 transition-colors"
+          className="bg-black text-white text-[13.5px] font-medium tracking-[-0.01em] px-7 py-3 hover:bg-black/80 transition-colors flex items-center gap-2"
         >
           Book now
+          <FiArrowUpRight className="w-4 h-4" />
         </Link>
       </div>
 

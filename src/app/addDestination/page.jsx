@@ -4,80 +4,50 @@ import { useState } from "react";
 import {
   Button,
   Input,
+  Label,
   TextField,
   TextArea,
+  Description,
+  FieldError,
   Select,
   ListBox,
+  Form,
 } from "@heroui/react";
 
-// ── Section wrapper ──────────────────────────────────
-function Section({ number, title, description, children }) {
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-[260px_1fr] gap-8 py-10 border-b border-black/[0.06]">
-      <div className="flex flex-col gap-1.5">
-        <span className="text-[11px] font-medium tracking-[0.1em] uppercase text-[#aaa] mb-1">
-          Step {number}
-        </span>
-        <h3 className="text-[15px] font-medium tracking-[-0.02em] text-black">
-          {title}
-        </h3>
-        <p className="text-[13px] text-[#888] tracking-[-0.01em] leading-relaxed">
-          {description}
-        </p>
-      </div>
-      <div className="flex flex-col gap-5">{children}</div>
-    </div>
-  );
-}
-
-// ── Field wrapper ────────────────────────────────────
-function Field({ label, hint, children, required }) {
-  return (
-    <div className="flex flex-col gap-1.5 w-full">
-      <label className="text-[13px] font-medium text-black tracking-[-0.01em]">
-        {label}
-        {required && <span className="text-[#aaa] ml-1">*</span>}
-      </label>
-      {children}
-      {hint && (
-        <span className="text-[12px] text-[#aaa] tracking-[-0.01em]">
-          {hint}
-        </span>
-      )}
-    </div>
-  );
-}
-
-// ── Sharp input style ────────────────────────────────
 const inputClass =
   "w-full h-11 px-3.5 text-[13.5px] text-black tracking-[-0.01em] bg-white border border-black/[0.15] rounded-none outline-none focus:border-black transition-colors placeholder:text-[#bbb]";
 
-const selectTriggerClass =
-  "w-full h-11 px-3.5 text-[13.5px] text-black tracking-[-0.01em] bg-white border border-black/[0.15] rounded-none outline-none focus:border-black transition-colors";
-
 const textareaClass =
   "w-full px-3.5 py-3 text-[13.5px] text-black tracking-[-0.01em] bg-white border border-black/[0.15] rounded-none outline-none focus:border-black transition-colors placeholder:text-[#bbb] resize-none leading-relaxed";
+
+const labelClass =
+  "text-[13px] font-medium text-black tracking-[-0.01em] mb-1 block";
+
+const descClass = "text-[12px] text-[#aaa] tracking-[-0.01em] mt-1 block";
+
+const errorClass = "text-[12px] text-red-500 tracking-[-0.01em] mt-1 block";
+
+const selectTriggerClass =
+  "w-full h-11 px-3.5 text-[13.5px] text-black tracking-[-0.01em] bg-white border border-black/[0.15] rounded-none outline-none focus:border-black transition-colors";
 
 export default function AddDestinationPage() {
   const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // TODO: connect to Express API
-    // const data = Object.fromEntries(new FormData(e.target))
-    // await fetch("http://localhost:5000/api/destinations", {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify(data)
-    // })
+    const form = new FormData(e.currentTarget);
+    const addDestinationData = Object.fromEntries(form.entries());
+    console.log("this is form data:", { addDestinationData });
+
+    // this submitted will show info about is successful or not about publishing
     setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 3000);
+    setTimeout(() => setSubmitted(false), 5000);
   };
 
   return (
     <main className="min-h-screen bg-white pt-[52px]">
       <div className="max-w-4xl mx-auto px-5">
-        {/* ── Page Header ── */}
+        {/* Page Header */}
         <div className="py-12 border-b border-black/[0.06]">
           <span className="text-[11px] font-medium tracking-[0.14em] uppercase text-[#aaa] block mb-3">
             Admin · Destinations
@@ -91,277 +61,342 @@ export default function AddDestinationPage() {
           </p>
         </div>
 
-        {/* ── Success message ── */}
-        {submitted && (
-          <div className="flex items-center gap-3 border border-black/[0.12] px-4 py-3 mt-8 text-[13px] text-black tracking-[-0.01em]">
-            <svg className="w-4 h-4 shrink-0" viewBox="0 0 16 16" fill="none">
-              <circle cx="8" cy="8" r="7" stroke="black" strokeWidth="1.5" />
-              <path
-                d="M5 8l2 2 4-4"
-                stroke="black"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-            Destination published successfully.
+        <Form onSubmit={handleSubmit} validationBehavior="native">
+          {/* ── Section 01: Basic Information ── */}
+          <div className="grid grid-cols-1 md:grid-cols-[260px_1fr] gap-8 py-10 border-b border-black/[0.06]">
+            <div>
+              <span className="text-[11px] font-medium tracking-[0.1em] uppercase text-[#aaa] block mb-1">
+                Step 01
+              </span>
+              <h3 className="text-[15px] font-medium tracking-[-0.02em] text-black mb-1">
+                Basic information
+              </h3>
+              <p className="text-[13px] text-[#888] tracking-[-0.01em] leading-relaxed">
+                Core details shown on destination cards throughout the site.
+              </p>
+            </div>
+
+            <div className="flex flex-col gap-5">
+              {/* Destination name */}
+              <TextField name="name" isRequired className="w-full">
+                <Label className={labelClass}>Destination name *</Label>
+                <Input
+                  placeholder="e.g. Bali Paradise, Tokyo Explorer"
+                  className={inputClass}
+                />
+                <Description className={descClass}>
+                  This is the main title shown on all destination cards
+                </Description>
+                <FieldError className={errorClass} />
+              </TextField>
+
+              {/* Country + Temp */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <TextField name="country" isRequired className="w-full">
+                  <Label className={labelClass}>Country *</Label>
+                  <Input placeholder="e.g. Indonesia" className={inputClass} />
+                  <FieldError className={errorClass} />
+                </TextField>
+
+                <TextField name="temp" className="w-full">
+                  <Label className={labelClass}>Average temperature</Label>
+                  <Input placeholder="e.g. 28°C" className={inputClass} />
+                  <Description className={descClass}>
+                    Typical temperature for this destination
+                  </Description>
+                </TextField>
+              </div>
+
+              {/* Tagline */}
+              <TextField name="tagline" isRequired className="w-full">
+                <Label className={labelClass}>Tagline *</Label>
+                <Input
+                  placeholder="e.g. Where gods meet the ocean"
+                  className={inputClass}
+                />
+                <Description className={descClass}>
+                  One short sentence shown on destination cards — make it
+                  compelling
+                </Description>
+                <FieldError className={errorClass} />
+              </TextField>
+            </div>
           </div>
-        )}
 
-        {/* ── Form ── */}
-        <form onSubmit={handleSubmit}>
-          {/* ── Section 1: Basic Info ── */}
-          <Section
-            number="01"
-            title="Basic information"
-            description="Core details shown on destination cards throughout the site."
-          >
-            <Field
-              label="Destination name"
-              required
-              hint="e.g. Bali Paradise, Tokyo Explorer, Iceland Aurora"
-            >
-              <input
-                name="name"
-                required
-                placeholder="Enter destination name"
-                className={inputClass}
-              />
-            </Field>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-              <Field label="Country" required hint="Full country name">
-                <input
-                  name="country"
-                  required
-                  placeholder="e.g. Indonesia"
-                  className={inputClass}
-                />
-              </Field>
-              <Field
-                label="Average temperature"
-                hint="Typical temp for this destination"
-              >
-                <input
-                  name="temp"
-                  placeholder="e.g. 28°C"
-                  className={inputClass}
-                />
-              </Field>
+          {/* ── Section 02: Classification ── */}
+          <div className="grid grid-cols-1 md:grid-cols-[260px_1fr] gap-8 py-10 border-b border-black/[0.06]">
+            <div>
+              <span className="text-[11px] font-medium tracking-[0.1em] uppercase text-[#aaa] block mb-1">
+                Step 02
+              </span>
+              <h3 className="text-[15px] font-medium tracking-[-0.02em] text-black mb-1">
+                Classification
+              </h3>
+              <p className="text-[13px] text-[#888] tracking-[-0.01em] leading-relaxed">
+                Helps travellers filter and discover this destination by type
+                and travel style.
+              </p>
             </div>
 
-            <Field
-              label="Tagline"
-              required
-              hint="One short line that sells this destination — shown on cards"
-            >
-              <input
-                name="tagline"
-                required
-                placeholder="e.g. Where gods meet the ocean"
-                className={inputClass}
-              />
-            </Field>
-          </Section>
+            <div className="flex flex-col gap-5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                {/* Category */}
+                <div className="flex flex-col gap-1">
+                  <Label className={labelClass}>Category *</Label>
+                  <Select name="category" className="w-full">
+                    <Select.Trigger className={selectTriggerClass}>
+                      <Select.Value placeholder="Select a category" />
+                      <Select.Indicator />
+                    </Select.Trigger>
+                    <Select.Popover>
+                      <ListBox>
+                        <ListBox.Item id="beach" textValue="Beach">
+                          Beach
+                        </ListBox.Item>
+                        <ListBox.Item id="city" textValue="City">
+                          City
+                        </ListBox.Item>
+                        <ListBox.Item id="nature" textValue="Nature">
+                          Nature
+                        </ListBox.Item>
+                        <ListBox.Item id="island" textValue="Island">
+                          Island
+                        </ListBox.Item>
+                        <ListBox.Item id="adventure" textValue="Adventure">
+                          Adventure
+                        </ListBox.Item>
+                        <ListBox.Item id="culture" textValue="Culture">
+                          Culture
+                        </ListBox.Item>
+                        <ListBox.Item id="mountain" textValue="Mountain">
+                          Mountain
+                        </ListBox.Item>
+                      </ListBox>
+                    </Select.Popover>
+                  </Select>
+                  <span className={descClass}>
+                    Primary type of this destination
+                  </span>
+                </div>
 
-          {/* ── Section 2: Classification ── */}
-          <Section
-            number="02"
-            title="Classification"
-            description="Helps travellers filter and discover this destination by type and style."
-          >
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-              <Field
-                label="Category"
-                required
-                hint="Primary type of destination"
-              >
-                <Select name="category" className="w-full">
-                  <Select.Trigger className={selectTriggerClass}>
-                    <Select.Value placeholder="Select a category" />
-                    <Select.Indicator />
-                  </Select.Trigger>
-                  <Select.Popover>
-                    <ListBox>
-                      <ListBox.Item id="beach" textValue="Beach">
-                        Beach
-                      </ListBox.Item>
-                      <ListBox.Item id="city" textValue="City">
-                        City
-                      </ListBox.Item>
-                      <ListBox.Item id="nature" textValue="Nature">
-                        Nature
-                      </ListBox.Item>
-                      <ListBox.Item id="island" textValue="Island">
-                        Island
-                      </ListBox.Item>
-                      <ListBox.Item id="adventure" textValue="Adventure">
-                        Adventure
-                      </ListBox.Item>
-                      <ListBox.Item id="culture" textValue="Culture">
-                        Culture
-                      </ListBox.Item>
-                      <ListBox.Item id="mountain" textValue="Mountain">
-                        Mountain
-                      </ListBox.Item>
-                    </ListBox>
-                  </Select.Popover>
-                </Select>
-              </Field>
-
-              <Field
-                label="Travel style"
-                required
-                hint="Best suited for which traveller type"
-              >
-                <Select name="style" className="w-full">
-                  <Select.Trigger className={selectTriggerClass}>
-                    <Select.Value placeholder="Select a style" />
-                    <Select.Indicator />
-                  </Select.Trigger>
-                  <Select.Popover>
-                    <ListBox>
-                      <ListBox.Item id="solo" textValue="Solo">
-                        Solo
-                      </ListBox.Item>
-                      <ListBox.Item id="couple" textValue="Couple">
-                        Couple
-                      </ListBox.Item>
-                      <ListBox.Item id="family" textValue="Family">
-                        Family
-                      </ListBox.Item>
-                      <ListBox.Item id="adventure" textValue="Adventure">
-                        Adventure
-                      </ListBox.Item>
-                      <ListBox.Item id="luxury" textValue="Luxury">
-                        Luxury
-                      </ListBox.Item>
-                      <ListBox.Item id="backpacker" textValue="Backpacker">
-                        Backpacker
-                      </ListBox.Item>
-                    </ListBox>
-                  </Select.Popover>
-                </Select>
-              </Field>
+                {/* Travel style */}
+                <div className="flex flex-col gap-1">
+                  <Label className={labelClass}>Travel style *</Label>
+                  <Select name="style" className="w-full">
+                    <Select.Trigger className={selectTriggerClass}>
+                      <Select.Value placeholder="Select a style" />
+                      <Select.Indicator />
+                    </Select.Trigger>
+                    <Select.Popover>
+                      <ListBox>
+                        <ListBox.Item id="solo" textValue="Solo">
+                          Solo
+                        </ListBox.Item>
+                        <ListBox.Item id="couple" textValue="Couple">
+                          Couple
+                        </ListBox.Item>
+                        <ListBox.Item id="family" textValue="Family">
+                          Family
+                        </ListBox.Item>
+                        <ListBox.Item id="adventure" textValue="Adventure">
+                          Adventure
+                        </ListBox.Item>
+                        <ListBox.Item id="luxury" textValue="Luxury">
+                          Luxury
+                        </ListBox.Item>
+                        <ListBox.Item id="backpacker" textValue="Backpacker">
+                          Backpacker
+                        </ListBox.Item>
+                      </ListBox>
+                    </Select.Popover>
+                  </Select>
+                  <span className={descClass}>
+                    Best suited for which traveller type
+                  </span>
+                </div>
+              </div>
             </div>
-          </Section>
+          </div>
 
-          {/* ── Section 3: Pricing & Duration ── */}
-          <Section
-            number="03"
-            title="Pricing & duration"
-            description="Displayed on destination cards and the booking detail page."
-          >
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-              <Field
-                label="Price per person (USD)"
-                required
-                hint="Enter a number only, e.g. 2700"
-              >
-                <input
-                  name="price"
-                  type="number"
-                  required
-                  min="0"
-                  placeholder="2700"
-                  className={inputClass}
-                />
-              </Field>
-              <Field label="Duration" required hint="e.g. 7 Days / 6 Nights">
-                <input
-                  name="duration"
-                  required
-                  placeholder="7 Days / 6 Nights"
-                  className={inputClass}
-                />
-              </Field>
+          {/* ── Section 03: Pricing & Duration ── */}
+          <div className="grid grid-cols-1 md:grid-cols-[260px_1fr] gap-8 py-10 border-b border-black/[0.06]">
+            <div>
+              <span className="text-[11px] font-medium tracking-[0.1em] uppercase text-[#aaa] block mb-1">
+                Step 03
+              </span>
+              <h3 className="text-[15px] font-medium tracking-[-0.02em] text-black mb-1">
+                Pricing & duration
+              </h3>
+              <p className="text-[13px] text-[#888] tracking-[-0.01em] leading-relaxed">
+                Displayed on destination cards and the booking detail page.
+              </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-              <Field
-                label="Price range"
-                hint="Used for filter — select the bracket this falls in"
-              >
-                <Select name="priceRange" className="w-full">
-                  <Select.Trigger className={selectTriggerClass}>
-                    <Select.Value placeholder="Select price range" />
-                    <Select.Indicator />
-                  </Select.Trigger>
-                  <Select.Popover>
-                    <ListBox>
-                      <ListBox.Item id="budget" textValue="Budget">
-                        Budget — Under $2,000
-                      </ListBox.Item>
-                      <ListBox.Item id="mid" textValue="Mid">
-                        Mid — $2,000 to $4,000
-                      </ListBox.Item>
-                      <ListBox.Item id="luxury" textValue="Luxury">
-                        Luxury — $4,000+
-                      </ListBox.Item>
-                    </ListBox>
-                  </Select.Popover>
-                </Select>
-              </Field>
-              <Field label="Trip rating" hint="Out of 5, e.g. 4.9">
-                <input
-                  name="rating"
-                  type="number"
-                  step="0.1"
-                  min="0"
-                  max="5"
-                  placeholder="4.9"
+            <div className="flex flex-col gap-5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                {/* Price */}
+                <TextField name="price" isRequired className="w-full">
+                  <Label className={labelClass}>Price per person (USD) *</Label>
+                  <Input
+                    type="number"
+                    min="0"
+                    placeholder="2700"
+                    className={inputClass}
+                  />
+                  <Description className={descClass}>
+                    Numbers only — e.g. 2700
+                  </Description>
+                  <FieldError className={errorClass} />
+                </TextField>
+
+                {/* Duration */}
+                <TextField name="duration" isRequired className="w-full">
+                  <Label className={labelClass}>Duration *</Label>
+                  <Input
+                    placeholder="7 Days / 6 Nights"
+                    className={inputClass}
+                  />
+                  <Description className={descClass}>
+                    Format: X Days / X Nights
+                  </Description>
+                  <FieldError className={errorClass} />
+                </TextField>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                {/* Price range */}
+                <div className="flex flex-col gap-1">
+                  <Label className={labelClass}>Price range</Label>
+                  <Select name="priceRange" className="w-full">
+                    <Select.Trigger className={selectTriggerClass}>
+                      <Select.Value placeholder="Select price range" />
+                      <Select.Indicator />
+                    </Select.Trigger>
+                    <Select.Popover>
+                      <ListBox>
+                        <ListBox.Item id="budget" textValue="Budget">
+                          Budget — Under $2,000
+                        </ListBox.Item>
+                        <ListBox.Item id="mid" textValue="Mid">
+                          Mid — $2,000 to $4,000
+                        </ListBox.Item>
+                        <ListBox.Item id="luxury" textValue="Luxury">
+                          Luxury — $4,000+
+                        </ListBox.Item>
+                      </ListBox>
+                    </Select.Popover>
+                  </Select>
+                  <span className={descClass}>
+                    Used for the price filter on the destinations page
+                  </span>
+                </div>
+
+                {/* Rating */}
+                <TextField name="rating" className="w-full">
+                  <Label className={labelClass}>Trip rating</Label>
+                  <Input
+                    type="number"
+                    step="0.1"
+                    min="0"
+                    max="5"
+                    placeholder="4.9"
+                    className={inputClass}
+                  />
+                  <Description className={descClass}>
+                    Out of 5 — e.g. 4.9
+                  </Description>
+                </TextField>
+              </div>
+            </div>
+          </div>
+
+          {/* ── Section 04: Media & Description ── */}
+          <div className="grid grid-cols-1 md:grid-cols-[260px_1fr] gap-8 py-10 border-b border-black/[0.06]">
+            <div>
+              <span className="text-[11px] font-medium tracking-[0.1em] uppercase text-[#aaa] block mb-1">
+                Step 04
+              </span>
+              <h3 className="text-[15px] font-medium tracking-[-0.02em] text-black mb-1">
+                Media & description
+              </h3>
+              <p className="text-[13px] text-[#888] tracking-[-0.01em] leading-relaxed">
+                Image and descriptions shown across cards and the destination
+                detail page.
+              </p>
+            </div>
+
+            <div className="flex flex-col gap-5">
+              {/* Image URL */}
+              <TextField name="image" isRequired className="w-full">
+                <Label className={labelClass}>Image URL *</Label>
+                <Input
+                  type="url"
+                  placeholder="https://images.unsplash.com/..."
                   className={inputClass}
                 />
-              </Field>
+                <Description className={descClass}>
+                  Paste a direct image link — Unsplash, Cloudinary, or any
+                  public URL
+                </Description>
+                <FieldError className={errorClass} />
+              </TextField>
+
+              {/* Short description */}
+              <TextField name="shortDescription" isRequired className="w-full">
+                <Label className={labelClass}>Short description *</Label>
+                <TextArea
+                  placeholder="A short compelling summary shown on destination cards — 2 to 3 sentences..."
+                  className={`${textareaClass} min-h-[80px]`}
+                />
+                <Description className={descClass}>
+                  Shown on destination cards — keep it punchy and under 3
+                  sentences
+                </Description>
+                <FieldError className={errorClass} />
+              </TextField>
+
+              {/* Full description */}
+              <TextField name="description" className="w-full">
+                <Label className={labelClass}>Full description</Label>
+                <TextArea
+                  placeholder="Write a detailed description covering highlights, local culture, best time to visit, must-see attractions, food, transport, and anything else that makes this destination special..."
+                  className={`${textareaClass} min-h-[160px]`}
+                />
+                <Description className={descClass}>
+                  Shown on the destination detail page — be as detailed as
+                  possible
+                </Description>
+              </TextField>
             </div>
-          </Section>
-
-          {/* ── Section 4: Media & Description ── */}
-          <Section
-            number="04"
-            title="Media & description"
-            description="The image and full description shown on the destination detail page."
-          >
-            <Field
-              label="Image URL"
-              required
-              hint="Paste a direct image link — Unsplash, Cloudinary, or any public URL"
-            >
-              <input
-                name="image"
-                type="url"
-                required
-                placeholder="https://images.unsplash.com/..."
-                className={inputClass}
-              />
-            </Field>
-
-            <Field
-              label="Short description"
-              required
-              hint="2–3 sentences shown on the destination card — keep it punchy"
-            >
-              <textarea
-                name="shortDescription"
-                required
-                rows={3}
-                placeholder="A short, compelling summary that makes travellers want to click..."
-                className={textareaClass}
-              />
-            </Field>
-
-            <Field
-              label="Full description"
-              hint="Full detailed description shown on the destination detail page — cover highlights, best time to visit, what to expect"
-            >
-              <textarea
-                name="description"
-                rows={6}
-                placeholder="Write a detailed description covering the key highlights, local culture, best time to visit, must-see attractions, and anything else that makes this destination special..."
-                className={textareaClass}
-              />
-            </Field>
-          </Section>
+          </div>
+          <div>
+            {/* Success message */}
+            {submitted && (
+              <div className="flex items-center gap-3 border border-green-200 bg-green-50 px-4 py-3 mt-8 text-[13px] text-green-700 tracking-[-0.01em] rounded-md mb-10">
+                <svg
+                  className="w-4 h-4 shrink-0"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                >
+                  <circle
+                    cx="8"
+                    cy="8"
+                    r="7"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                  />
+                  <path
+                    d="M5 8l2 2 4-4"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                Destination published successfully.
+              </div>
+            )}
+          </div>
 
           {/* ── Actions ── */}
           <div className="flex items-center justify-between gap-4 py-10">
@@ -387,7 +422,7 @@ export default function AddDestinationPage() {
               </button>
             </div>
           </div>
-        </form>
+        </Form>
       </div>
     </main>
   );

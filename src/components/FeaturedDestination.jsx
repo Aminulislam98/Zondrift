@@ -1,68 +1,9 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
 
-const destinations = [
-  {
-    id: 1,
-    name: "Bali, Indonesia",
-    category: "Beach",
-    description:
-      "Tropical paradise with ancient temples and endless rice fields.",
-    image:
-      "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800&auto=format&fit=crop&q=80",
-    trips: "2.4k trips planned",
-  },
-  {
-    id: 2,
-    name: "Santorini, Greece",
-    category: "Island",
-    description: "Iconic white-washed villages perched above the Aegean Sea.",
-    image:
-      "https://images.unsplash.com/photo-1533105079780-92b9be482077?w=800&auto=format&fit=crop&q=80",
-    trips: "1.8k trips planned",
-  },
-  {
-    id: 3,
-    name: "Tokyo, Japan",
-    category: "City",
-    description: "Where ultra-modern meets ancient tradition at every corner.",
-    image:
-      "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=800&auto=format&fit=crop&q=80",
-    trips: "3.1k trips planned",
-  },
-  {
-    id: 4,
-    name: "Iceland",
-    category: "Nature",
-    description: "Northern lights, glaciers, and dramatic volcanic landscapes.",
-    image:
-      "https://images.unsplash.com/photo-1474690870753-1b92efa1f2d8?w=800&auto=format&fit=crop&q=80",
-    trips: "1.2k trips planned",
-  },
-  {
-    id: 5,
-    name: "Paris, France",
-    category: "City",
-    description:
-      "The city of light — art, fashion, food, and timeless romance.",
-    image:
-      "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=800&auto=format&fit=crop&q=80",
-    trips: "4.2k trips planned",
-  },
-  {
-    id: 6,
-    name: "Machu Picchu, Peru",
-    category: "Adventure",
-    description: "Ancient Incan citadel set high in the Andes mountains.",
-    image:
-      "https://images.unsplash.com/photo-1526392060635-9d6019884377?w=800&auto=format&fit=crop&q=80",
-    trips: "980 trips planned",
-  },
-];
-
-export default function FeaturedDestinations() {
+export default async function FeaturedDestinations() {
+  const res = await fetch("http://localhost:4000/destination");
+  const destinations = await res.json();
   return (
     <section className="bg-white py-24 px-5">
       <div className="max-w-6xl mx-auto">
@@ -99,10 +40,9 @@ export default function FeaturedDestinations() {
 
         {/* Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {destinations.map((dest) => (
-            <Link
-              key={dest.id}
-              href={`/destinations/${dest.id}`}
+          {destinations.slice(0, 6).map((dest) => (
+            <div
+              key={dest._id}
               className="group relative rounded-2xl overflow-hidden bg-black block"
             >
               {/* Image */}
@@ -137,7 +77,10 @@ export default function FeaturedDestinations() {
                   <span className="text-[11px] text-white/40 tracking-[-0.01em]">
                     {dest.trips}
                   </span>
-                  <span className="text-[12px] text-white/70 flex items-center gap-1 group-hover:text-white transition-colors duration-200">
+                  <Link
+                    href={`/destinations/${dest._id}`}
+                    className="text-[12px] text-white/70 flex items-center gap-1 group-hover:text-white transition-colors duration-200"
+                  >
                     Explore
                     <svg
                       className="w-3 h-3 transition-transform duration-200 group-hover:translate-x-0.5"
@@ -152,10 +95,10 @@ export default function FeaturedDestinations() {
                         strokeLinejoin="round"
                       />
                     </svg>
-                  </span>
+                  </Link>
                 </div>
               </div>
-            </Link>
+            </div>
           ))}
         </div>
       </div>

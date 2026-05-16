@@ -1,5 +1,3 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -15,52 +13,6 @@ import {
   FiTag,
   FiUsers,
 } from "react-icons/fi";
-
-// ── Hardcoded for now — replace with MongoDB fetch ──
-// Real: const res = await fetch(`http://localhost:4000/destination/${params.id}`)
-// Real: const dest = await res.json()
-const dest = {
-  _id: "1",
-  name: "Kyoto Serenity",
-  country: "Japan",
-  category: "Culture",
-  style: "Solo",
-  tagline: "Temples, bamboo groves and timeless tradition",
-  image:
-    "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=1600&auto=format&fit=crop&q=85",
-  rating: 4.9,
-  price: 2800,
-  duration: "6 Days / 5 Nights",
-  temp: "17°C",
-  trips: 2100,
-  priceRange: "Mid",
-  shortDescription:
-    "Ancient temples, traditional tea houses and the world famous Arashiyama bamboo grove. Kyoto is the cultural soul of Japan.",
-  description:
-    "Kyoto is the cultural heart of Japan and one of the most beautiful cities in the world. Once the imperial capital for over a thousand years, Kyoto is home to more than 1,600 Buddhist temples, 400 Shinto shrines, and some of the best preserved traditional architecture in all of Asia. Wander through the iconic vermillion torii gates of Fushimi Inari, stroll the lantern-lit streets of the Gion geisha district after dark, and lose yourself in the ethereal beauty of the Arashiyama bamboo grove at sunrise.",
-  highlights: [
-    "Walk through the famous Arashiyama bamboo grove",
-    "Visit Fushimi Inari shrine and its thousand torii gates",
-    "Experience a traditional Japanese tea ceremony",
-    "Explore the historic Gion geisha district at dusk",
-    "See the golden Kinkaku-ji temple reflecting in the pond",
-  ],
-  included: [
-    "Return flights from London",
-    "5 nights accommodation in a traditional ryokan",
-    "Daily breakfast included",
-    "Airport transfers on arrival and departure",
-    "Guided walking tour of Gion district",
-    "24/7 Zondrift support throughout your trip",
-  ],
-  notIncluded: [
-    "Travel insurance",
-    "Personal spending and shopping",
-    "Optional day trips to Nara or Osaka",
-    "Visa fees if applicable",
-  ],
-};
-// ───────────────────────────────────────────────────
 
 function StatPill({ icon, label, value }) {
   return (
@@ -78,7 +30,11 @@ function StatPill({ icon, label, value }) {
   );
 }
 
-export default function DestinationDetailPage({ params }) {
+export default async function DestinationDetailPage({ params }) {
+  const { id } = await params;
+  const res = await fetch(`http://localhost:4000/destination/${id}`);
+  const dest = await res.json();
+  console.log("this is dest form res:", dest);
   return (
     <main className="min-h-screen bg-white">
       {/* ── Hero ── */}
@@ -88,7 +44,7 @@ export default function DestinationDetailPage({ params }) {
           alt={dest.name}
           fill
           priority
-          quality={90}
+          quality={70}
           className="object-cover object-center"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-transparent" />
@@ -159,7 +115,7 @@ export default function DestinationDetailPage({ params }) {
             <StatPill
               icon={<FiThermometer className="w-3.5 h-3.5" />}
               label="Temperature"
-              value={dest.temp}
+              value={`${dest.temp}°C`}
             />
             <StatPill
               icon={<FiTag className="w-3.5 h-3.5" />}
@@ -288,7 +244,8 @@ export default function DestinationDetailPage({ params }) {
                   {
                     icon: <FiThermometer className="w-3.5 h-3.5 text-[#bbb]" />,
                     label: "Temperature",
-                    value: dest.temp,
+
+                    value: `${dest.temp}°C`,
                   },
                   {
                     icon: <FiTag className="w-3.5 h-3.5 text-[#bbb]" />,

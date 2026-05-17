@@ -26,7 +26,7 @@ export function DeleteDestination({ dest }) {
   return (
     <AlertDialog>
       {/* Trigger */}
-      <Button className="min-w-0 h-auto min-h-0 rounded-none bg-white flex items-center gap-1.5 text-[12px] leading-none text-[#ccc] tracking-[-0.01em] border border-black/[0.06] w-full py-1.5 hover:border-red-200 hover:text-red-500 transition-all  justify-center ">
+      <Button className="flex items-center gap-1 text-[12px] text-[#636366] border border-black/[0.1] px-2.5 py-1.5 rounded-lg hover:border-black/20 hover:text-red-500 bg-white transition-all w-full">
         <FiTrash2 className="w-3.5 h-3.5" />
         Delete
       </Button>

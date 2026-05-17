@@ -47,8 +47,19 @@ export default function BookingForm({ dest }) {
     const bookingData = Object.fromEntries(form.entries());
 
     bookingData.userId = user?.id;
+
     bookingData.destinationId = dest._id;
     bookingData.destinationName = dest.name;
+    bookingData.destinationImage = dest.image;
+    bookingData.destination = {
+      _id: dest._id,
+      name: dest.name,
+      image: dest.image,
+      country: dest.country,
+      category: dest.category,
+      duration: dest.duration,
+      price: dest.price,
+    };
     bookingData.travellers = Number(travellers);
     bookingData.totalPrice = totalPrice;
     bookingData.pricePerPerson = dest.price;
@@ -58,8 +69,6 @@ export default function BookingForm({ dest }) {
       month: "long",
       year: "numeric",
     });
-    console.log("booking data:", bookingData);
-
     const res = await fetch("http://localhost:4000/booking", {
       method: "POST",
       headers: {
@@ -68,7 +77,6 @@ export default function BookingForm({ dest }) {
       body: JSON.stringify(bookingData),
     });
     const data = await res.json();
-    console.log("booking data post to mongodb:", data);
 
     setTimeout(() => {
       setLoading(false);

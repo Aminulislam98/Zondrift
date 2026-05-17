@@ -122,7 +122,7 @@ export default function Navbar() {
                     }`}
                   >
                     <Avatar.Image alt="John Doe" src={user?.image} />
-                    <Avatar.Fallback>JD</Avatar.Fallback>
+                    <Avatar.Fallback>{user?.name.charAt()}</Avatar.Fallback>
                   </Avatar>
                 ) : (
                   <span
@@ -185,7 +185,7 @@ export default function Navbar() {
                   </div>
                   <div className="h-px bg-black/[0.06] mx-1.5" />
                   <div className="p-1.5">
-                    <LogoutConfirmation />
+                    <LogoutConfirmation setDropdownOpen={setDropdownOpen} />
                   </div>
                 </div>
               )}
@@ -279,18 +279,19 @@ export default function Navbar() {
         <div className="px-4 pb-4 pt-1 border-t border-black/[0.06]">
           {user ? (
             <div className="flex items-center justify-between py-2">
-              <div className="flex items-center gap-2.5">
+              <div className="flex items-center gap-2.5 w-full">
                 <span className="w-8 h-8 rounded-full bg-black text-white flex items-center justify-center text-[12px] font-medium">
                   {user?.name.charAt()}
                 </span>
                 <span className="text-[14px] text-black">{user.name}</span>
               </div>
-              <button
+              {/* <button
                 className="text-[13px] text-[#999] hover:text-black transition-colors"
                 onClick={() => setMenuOpen(false)}
               >
                 Log out
-              </button>
+              </button> */}
+              <LogoutConfirmation setDropdownOpen={setDropdownOpen} />
             </div>
           ) : (
             <div className="flex gap-2 pt-1">

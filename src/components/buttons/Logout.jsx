@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { authClient } from "@/lib/auth-client";
 
-export function LogoutConfirmation() {
+export function LogoutConfirmation({ setDropdownOpen }) {
   const router = useRouter();
 
   const logout = () => {
@@ -22,7 +22,7 @@ export function LogoutConfirmation() {
   return (
     <AlertDialog>
       {/* Trigger */}
-      <Button className="w-full text-left px-3 py-2 text-[13px] text-[#999] rounded-xl hover:bg-black/[0.04] transition-colors bg-white">
+      <Button className="max-w-full w-full min-w-0 text-left px-3 py-2 text-[13px] text-[#999] rounded-xl hover:bg-black/[0.04] transition-colors bg-white">
         <FiLogOut className="w-3.5 h-3.5" />
         Log out
       </Button>
@@ -52,6 +52,7 @@ export function LogoutConfirmation() {
             {/* Footer */}
             <AlertDialog.Footer className="flex items-center justify-end gap-2 px-6 py-4">
               <Button
+                onClick={() => setDropdownOpen(false)}
                 slot="close"
                 className="min-w-0 h-auto min-h-0 rounded-none bg-white text-[13px] text-[#555] tracking-[-0.01em] border border-black/[0.12] px-5 py-2.5 hover:border-black/25 hover:text-black transition-all"
               >

@@ -12,6 +12,7 @@ import {
   FiArrowUpRight,
   FiInbox,
 } from "react-icons/fi";
+import { DeleteBooking } from "./buttons/DeleteBooking";
 // ── Status config ──
 const STATUS = {
   confirmed: { label: "Confirmed", className: "bg-black text-white" },
@@ -48,14 +49,20 @@ function SectionLabel({ label, count, muted }) {
 }
 
 function BookingCard({ booking }) {
+  console.log("this is booking:", booking?._id);
   const [status, setStatus] = useState(booking.status);
   const cancelled = status === "cancelled";
   const dest = booking.destination;
-
-  const handleCancel = async () => {
-    // TODO: await fetch(`http://localhost:4000/bookings/${booking._id}`, { method: "PATCH", body: JSON.stringify({ status: "cancelled" }) })
-    setStatus("cancelled");
-  };
+  //   const handleCancel = async (id) => {
+  //     const res = await fetch(`http://localhost:4000/booking/${id}`, {
+  //       method: "DELETE",
+  //       headers: {
+  //         "content-type": "application/json",
+  //       },
+  //     });
+  //     const data = await res.json();
+  //     console.log("Deleted Data:", data);
+  //   };
 
   return (
     <div
@@ -148,13 +155,14 @@ function BookingCard({ booking }) {
             </span>
             <div className="flex items-center gap-2 shrink-0">
               {!cancelled && (
-                <button
-                  onClick={handleCancel}
-                  className="flex items-center gap-1.5 text-[clamp(11px,1.3vw,12px)] text-[#aaa] tracking-[-0.01em] border border-black/[0.08] px-3 py-1.5 hover:text-red-500 hover:border-red-200 transition-all"
-                >
-                  <FiX className="w-3 h-3" />
-                  Cancel
-                </button>
+                // <button
+                //   onClick={() => handleCancel(booking._id)}
+                //   className="flex items-center gap-1.5 text-[clamp(11px,1.3vw,12px)] text-[#aaa] tracking-[-0.01em] border border-black/[0.08] px-3 py-1.5 hover:text-red-500 hover:border-red-200 transition-all"
+                // >
+                //   <FiX className="w-3 h-3" />
+                //   Cancel
+                // </button>
+                <DeleteBooking booking={booking} />
               )}
               <Link
                 href={`/destinations/${dest._id}`}

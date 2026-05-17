@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import { Avatar } from "@heroui/react";
 import { LogoutConfirmation } from "./buttons/Logout";
+import Image from "next/image";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -116,21 +117,21 @@ export default function Navbar() {
                 }`}
               >
                 {user?.image ? (
-                  <Avatar
-                    className={`w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-medium transition-colors duration-300 ${
-                      scrolled ? "bg-black text-white" : "bg-white text-black"
-                    }`}
-                  >
-                    <Avatar.Image alt="John Doe" src={user?.image} />
-                    <Avatar.Fallback>{user?.name.charAt()}</Avatar.Fallback>
-                  </Avatar>
+                  <Image
+                    width={7}
+                    height={7}
+                    src={user?.image}
+                    alt={user?.name}
+                    className="w-7 h-7 rounded-full object-cover"
+                    referrerPolicy="no-referrer" // ← Google images এর জন্য জরুরি
+                  />
                 ) : (
                   <span
-                    className={`w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-medium transition-colors duration-300 ${
+                    className={`w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-medium ${
                       scrolled ? "bg-black text-white" : "bg-white text-black"
                     }`}
                   >
-                    {user?.name.charAt()}
+                    {user?.name?.charAt(0)}
                   </span>
                 )}
                 <span

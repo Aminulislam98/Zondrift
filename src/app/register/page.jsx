@@ -11,6 +11,10 @@ import {
   Form,
 } from "@heroui/react";
 import { FiUser, FiMail, FiLock, FiEye, FiEyeOff } from "react-icons/fi";
+import { betterAuth, object } from "better-auth";
+import { authClient } from "@/lib/auth-client";
+import { error } from "better-auth/api";
+import { useRouter } from "next/navigation";
 
 const inputClass =
   "w-full h-11 px-3.5 text-[13.5px] text-black tracking-[-0.01em] bg-white border border-black/[0.15] rounded-none outline-none focus:border-black transition-colors placeholder:text-[#bbb]";
@@ -22,20 +26,40 @@ const descClass = "text-[12px] text-[#bbb] tracking-[-0.01em] mt-1 block";
 export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    const form = new FormData(e.currentTarget);
-    const data = Object.fromEntries(form.entries());
-    console.log("register:", data);
-    // TODO: connect to auth
-    setTimeout(() => setLoading(false), 1000);
+    const formData = new FormData(e.currentTarget);
+    const user = Object.fromEntries(formData.entries());
+
+    try {
+      const { data, error } = await authClient.signUp.email({
+        email: user.email,
+        password: user.password,
+        name: user.name,
+      });
+      if (error) {
+        alert(error.message || "Something went wrong");
+      }
+      router.push("/login");
+    } catch (err) {
+      console.error("Unexpected error:", err);
+      alert("Unexpected error occurred");
+    } finally {
+      setLoading(false);
+    }
+
+    if (!error) {
+      setTimeout(() => setLoading(false), 1000);
+    }
+    console.log("this is from user data:", user);
   };
 
   return (
     <main className="min-h-screen bg-white flex items-center justify-center px-5">
-      <div className="w-full max-w-[340px] flex flex-col gap-7 py-14">
+      <div className="w-full max-w-85 flex flex-col gap-7 py-14">
         {/* Header */}
         <div className="flex flex-col items-center justify-center py-2">
           <h1 className="text-[26px] font-medium tracking-[-0.04em] text-black mb-1">
@@ -152,7 +176,7 @@ export default function RegisterPage() {
         {/* Google */}
         <button
           onClick={() => console.log("google")}
-          className="w-full flex items-center justify-center gap-3 h-11 border border-black/[0.12] text-[13.5px] text-black tracking-[-0.01em] hover:border-black/25 hover:bg-black/[0.02] transition-all"
+          className="w-full flex items-center justify-center gap-3 h-11 border border-black/12 text-[13.5px] text-black tracking-[-0.01em] hover:border-black/25 hover:bg-black/2 transition-all"
         >
           <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24">
             <path

@@ -3,14 +3,8 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
-// ── swap these manually while practicing ──
-const isLoggedIn = false;
-const mockUser = {
-  name: "Aminul",
-  initials: "AI",
-};
-// ─────────────────────────────────────────
+import { authClient } from "@/lib/auth-client";
+import { Avatar } from "@heroui/react";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -22,6 +16,11 @@ const navLinks = [
 
 export default function Navbar() {
   const pathname = usePathname();
+
+  // user data from mongo db
+  const { data: session } = authClient.useSession();
+  const user = session?.user;
+  console.log(user);
 
   // only home page gets the transparent → white scroll effect
   // every other page starts white immediately
@@ -103,7 +102,7 @@ export default function Navbar() {
 
         {/* Desktop Right */}
         <div className="hidden md:flex items-center gap-3">
-          {isLoggedIn ? (
+          {user ? (
             <div className="relative" id="profile-dropdown">
               <button
                 onClick={() => setDropdownOpen(!dropdownOpen)}
@@ -113,19 +112,30 @@ export default function Navbar() {
                     : "border-white/20 hover:border-white/40"
                 }`}
               >
-                <span
-                  className={`w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-medium transition-colors duration-300 ${
-                    scrolled ? "bg-black text-white" : "bg-white text-black"
-                  }`}
-                >
-                  {mockUser.initials}
-                </span>
+                {user?.image ? (
+                  <Avatar
+                    className={`w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-medium transition-colors duration-300 ${
+                      scrolled ? "bg-black text-white" : "bg-white text-black"
+                    }`}
+                  >
+                    <Avatar.Image alt="John Doe" src={user?.image} />
+                    <Avatar.Fallback>JD</Avatar.Fallback>
+                  </Avatar>
+                ) : (
+                  <span
+                    className={`w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-medium transition-colors duration-300 ${
+                      scrolled ? "bg-black text-white" : "bg-white text-black"
+                    }`}
+                  >
+                    {user?.name.charAt()}
+                  </span>
+                )}
                 <span
                   className={`text-[13px] tracking-[-0.01em] transition-colors duration-300 ${
                     scrolled ? "text-black" : "text-white"
                   }`}
                 >
-                  {mockUser.name}
+                  {user?.name}
                 </span>
                 <svg
                   className={`w-3 h-3 transition-all duration-200 ${
@@ -269,13 +279,13 @@ export default function Navbar() {
         </div>
 
         <div className="px-4 pb-4 pt-1 border-t border-black/[0.06]">
-          {isLoggedIn ? (
+          {user ? (
             <div className="flex items-center justify-between py-2">
               <div className="flex items-center gap-2.5">
                 <span className="w-8 h-8 rounded-full bg-black text-white flex items-center justify-center text-[12px] font-medium">
-                  {mockUser.initials}
+                  {user?.name.charAt()}
                 </span>
-                <span className="text-[14px] text-black">{mockUser.name}</span>
+                <span className="text-[14px] text-black">{user.name}</span>
               </div>
               <button
                 className="text-[13px] text-[#999] hover:text-black transition-colors"

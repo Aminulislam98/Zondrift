@@ -36,12 +36,13 @@ export default function RegisterPage() {
 
     try {
       const { data, error } = await authClient.signUp.email({
-        email: user.email,
-        password: user.password,
-        name: user.name,
+        email: user?.email,
+        password: user?.password,
+        name: user?.name,
       });
       if (error) {
-        alert(error.message || "Something went wrong");
+        toast.error(error.message || "Something went wrong");
+        return;
       }
       router.push("/login");
     } catch (err) {

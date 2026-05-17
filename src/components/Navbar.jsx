@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import { Avatar } from "@heroui/react";
+import { LogoutConfirmation } from "./buttons/Logout";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -20,7 +21,7 @@ export default function Navbar() {
   // user data from mongo db
   const { data: session } = authClient.useSession();
   const user = session?.user;
-  console.log(user);
+  const userFirstName = user?.name.split(" ")[0];
 
   // only home page gets the transparent → white scroll effect
   // every other page starts white immediately
@@ -59,6 +60,8 @@ export default function Navbar() {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  // logout
 
   return (
     <nav
@@ -135,7 +138,7 @@ export default function Navbar() {
                     scrolled ? "text-black" : "text-white"
                   }`}
                 >
-                  {user?.name}
+                  {user?.name ? userFirstName : "Guest"}
                 </span>
                 <svg
                   className={`w-3 h-3 transition-all duration-200 ${
@@ -182,12 +185,7 @@ export default function Navbar() {
                   </div>
                   <div className="h-px bg-black/[0.06] mx-1.5" />
                   <div className="p-1.5">
-                    <button
-                      className="w-full text-left px-3 py-2 text-[13px] text-[#999] rounded-xl hover:bg-black/[0.04] transition-colors"
-                      onClick={() => setDropdownOpen(false)}
-                    >
-                      Log out
-                    </button>
+                    <LogoutConfirmation />
                   </div>
                 </div>
               )}

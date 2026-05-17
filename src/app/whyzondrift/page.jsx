@@ -29,33 +29,33 @@ const features = [
 
 export default function WhyZondrift() {
   return (
-    <section className="bg-[#f8f8f6] py-14 md:py-24 px-5">
+    <section className="bg-[#f8f8f6] py-[clamp(48px,8vw,96px)] px-[clamp(16px,4vw,40px)]">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="mb-10 md:mb-14">
-          <span className="text-[11px] font-medium tracking-[0.14em] uppercase text-[#aaa] block mb-3">
+        <div className="mb-[clamp(24px,4vw,48px)]">
+          <span className="text-[11px] font-medium tracking-[0.14em] uppercase text-[#aaa] block mb-[clamp(8px,1.5vw,14px)]">
             Why Zondrift
           </span>
-          <h2 className="text-[28px] md:text-[48px] font-medium tracking-[-0.04em] text-black leading-[1.05] max-w-lg">
+          <h2 className="text-[clamp(24px,4vw,48px)] font-medium tracking-[-0.04em] text-black leading-[1.05] max-w-lg">
             Everything you need. Nothing you don't.
           </h2>
         </div>
 
-        {/* Features */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {/* Features grid — auto-fit so it never breaks */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-[clamp(8px,1.5vw,16px)]">
           {features.map((feature) => (
             <div
               key={feature.title}
-              className="bg-white p-6 md:p-8 flex flex-col gap-4 border border-black/[0.06] hover:border-black/[0.12] transition-colors"
+              className="bg-white p-[clamp(20px,3vw,32px)] flex flex-col gap-[clamp(12px,2vw,20px)] border border-black/[0.06] hover:border-black/[0.14] transition-colors"
             >
-              <div className="w-9 h-9 bg-black/[0.04] flex items-center justify-center text-black shrink-0">
+              <div className="w-[clamp(32px,4vw,40px)] h-[clamp(32px,4vw,40px)] bg-black/[0.04] flex items-center justify-center text-black shrink-0">
                 {feature.icon}
               </div>
-              <div className="flex flex-col gap-1.5">
-                <h3 className="text-[15px] md:text-[17px] font-medium tracking-[-0.03em] text-black">
+              <div className="flex flex-col gap-[clamp(4px,1vw,8px)]">
+                <h3 className="text-[clamp(14px,1.8vw,17px)] font-medium tracking-[-0.03em] text-black">
                   {feature.title}
                 </h3>
-                <p className="text-[13.5px] text-[#888] tracking-[-0.01em] leading-relaxed">
+                <p className="text-[clamp(13px,1.5vw,14px)] text-[#888] tracking-[-0.01em] leading-relaxed">
                   {feature.description}
                 </p>
               </div>

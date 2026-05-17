@@ -32,60 +32,66 @@ const testimonials = [
 
 export default function Testimonials() {
   return (
-    <section className="bg-white py-14 md:py-24 px-5 border-t border-black/[0.06]">
+    <section className="bg-white py-[clamp(48px,8vw,96px)] px-[clamp(16px,4vw,40px)] border-t border-black/[0.06]">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10 md:mb-14">
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-[clamp(12px,2vw,20px)] mb-[clamp(24px,4vw,48px)]">
           <div>
-            <span className="text-[11px] font-medium tracking-[0.14em] uppercase text-[#aaa] block mb-3">
+            <span className="text-[11px] font-medium tracking-[0.14em] uppercase text-[#aaa] block mb-[clamp(8px,1.5vw,14px)]">
               Traveller stories
             </span>
-            <h2 className="text-[28px] md:text-[48px] font-medium tracking-[-0.04em] text-black leading-[1.05]">
+            <h2 className="text-[clamp(24px,4vw,48px)] font-medium tracking-[-0.04em] text-black leading-[1.05]">
               Real trips. Real people.
             </h2>
           </div>
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-2.5 shrink-0">
             <div className="flex items-center gap-0.5">
               {[...Array(5)].map((_, i) => (
                 <FiStar key={i} className="w-3.5 h-3.5 text-black fill-black" />
               ))}
             </div>
-            <span className="text-[13px] text-[#888] tracking-[-0.01em]">
+            <span className="text-[clamp(12px,1.5vw,13px)] text-[#888] tracking-[-0.01em] whitespace-nowrap">
               5.0 from 200+ travellers
             </span>
           </div>
         </div>
 
-        {/* Reviews */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {/* Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-[clamp(8px,1.5vw,16px)]">
           {testimonials.map((t) => (
-            <div key={t.name} className="flex flex-col gap-5 p-6 bg-[#f8f8f6]">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-0.5">
+            <div
+              key={t.name}
+              className="flex flex-col gap-[clamp(16px,2.5vw,24px)] p-[clamp(20px,3vw,28px)] bg-[#f8f8f6]"
+            >
+              {/* Stars + destination */}
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex items-center gap-0.5 shrink-0">
                   {[...Array(t.rating)].map((_, i) => (
                     <FiStar key={i} className="w-3 h-3 text-black fill-black" />
                   ))}
                 </div>
-                <span className="text-[11px] font-medium tracking-[0.06em] uppercase text-[#bbb]">
+                <span className="text-[10px] font-medium tracking-[0.06em] uppercase text-[#bbb] truncate text-right">
                   {t.destination}
                 </span>
               </div>
 
-              <p className="text-[14px] md:text-[15px] text-black/70 tracking-[-0.01em] leading-[1.7] flex-1">
-                {t.review}
+              {/* Review */}
+              <p className="text-[clamp(13px,1.6vw,15px)] text-black/70 tracking-[-0.01em] leading-[1.75] flex-1">
+                "{t.review}"
               </p>
 
+              {/* Author */}
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-black flex items-center justify-center shrink-0">
+                <div className="w-[clamp(30px,3.5vw,36px)] h-[clamp(30px,3.5vw,36px)] bg-black flex items-center justify-center shrink-0">
                   <span className="text-[10px] font-medium text-white tracking-[0.04em]">
                     {t.initials}
                   </span>
                 </div>
-                <div>
-                  <p className="text-[13px] font-medium text-black tracking-[-0.02em]">
+                <div className="min-w-0">
+                  <p className="text-[clamp(12px,1.5vw,13px)] font-medium text-black tracking-[-0.02em] truncate">
                     {t.name}
                   </p>
-                  <p className="text-[11.5px] text-[#aaa] tracking-[-0.01em]">
+                  <p className="text-[clamp(11px,1.3vw,11.5px)] text-[#aaa] tracking-[-0.01em] truncate">
                     {t.location}
                   </p>
                 </div>

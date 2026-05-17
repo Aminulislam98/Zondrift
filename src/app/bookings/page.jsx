@@ -7,16 +7,14 @@ import {
   FiMapPin,
   FiClock,
   FiCalendar,
-  FiUsers,
   FiTag,
   FiX,
   FiArrowUpRight,
   FiInbox,
 } from "react-icons/fi";
 
-// ── Replace with MongoDB fetch later ──
+// ── Replace with fetch later ──
 // const res = await fetch("http://localhost:4000/bookings?userId=USER_ID")
-// const bookings = await res.json()
 const BOOKINGS = [
   {
     _id: "b1",
@@ -73,21 +71,12 @@ const BOOKINGS = [
     status: "cancelled",
   },
 ];
-// ─────────────────────────────────────
 
+// ── Status config ──
 const STATUS = {
-  confirmed: {
-    label: "Confirmed",
-    className: "bg-black text-white",
-  },
-  pending: {
-    label: "Pending",
-    className: "bg-black/[0.06] text-black",
-  },
-  cancelled: {
-    label: "Cancelled",
-    className: "bg-black/[0.04] text-[#aaa]",
-  },
+  confirmed: { label: "Confirmed", className: "bg-black text-white" },
+  pending: { label: "Pending", className: "bg-black/[0.06] text-black" },
+  cancelled: { label: "Cancelled", className: "bg-black/[0.04] text-[#aaa]" },
 };
 
 function StatusBadge({ status }) {
@@ -101,138 +90,138 @@ function StatusBadge({ status }) {
   );
 }
 
+function SectionLabel({ label, count, muted }) {
+  return (
+    <div className="flex items-center gap-2.5 mb-[clamp(16px,2.5vw,24px)]">
+      <h2
+        className={`text-[13px] font-medium tracking-[-0.01em] ${muted ? "text-[#aaa]" : "text-black"}`}
+      >
+        {label}
+      </h2>
+      <span
+        className={`text-[11px] px-2 py-0.5 ${muted ? "text-[#ccc] bg-black/[0.03]" : "text-[#aaa] bg-black/[0.04]"}`}
+      >
+        {count}
+      </span>
+    </div>
+  );
+}
+
 function BookingCard({ booking }) {
-  const [cancelled, setCancelled] = useState(booking.status === "cancelled");
   const [status, setStatus] = useState(booking.status);
-
-  const handleCancel = () => {
-    // TODO: PATCH to Express API
-    // await fetch(`http://localhost:4000/bookings/${booking._id}`, {
-    //   method: "PATCH",
-    //   headers: { "content-type": "application/json" },
-    //   body: JSON.stringify({ status: "cancelled" }),
-    // })
-    setStatus("cancelled");
-    setCancelled(true);
-  };
-
+  const cancelled = status === "cancelled";
   const dest = booking.destination;
+
+  const handleCancel = async () => {
+    // TODO: await fetch(`http://localhost:4000/bookings/${booking._id}`, { method: "PATCH", body: JSON.stringify({ status: "cancelled" }) })
+    setStatus("cancelled");
+  };
 
   return (
     <div
-      className={`border border-black/[0.08] overflow-hidden transition-all duration-200 ${
-        status === "cancelled" ? "opacity-60" : ""
-      }`}
+      className={`border border-black/[0.08] overflow-hidden transition-opacity duration-300 ${cancelled ? "opacity-50" : ""}`}
     >
-      {/* Top — image + info */}
       <div className="flex flex-col sm:flex-row">
         {/* Image */}
-        <div className="relative w-full sm:w-[200px] h-[180px] sm:h-auto shrink-0 bg-black">
+        <div className="relative w-full sm:w-[clamp(140px,18vw,200px)] aspect-[16/9] sm:aspect-auto sm:min-h-full shrink-0 bg-black">
           <Image
             src={dest.image}
             alt={dest.name}
             fill
             quality={80}
+            sizes="(max-width: 640px) 100vw, 200px"
             className="object-cover"
           />
-          {status === "cancelled" && (
-            <div className="absolute inset-0 bg-white/60" />
-          )}
+          {cancelled && <div className="absolute inset-0 bg-white/60" />}
         </div>
 
-        {/* Info */}
-        <div className="flex flex-col justify-between flex-1 p-5 gap-4">
-          {/* Top row */}
-          <div className="flex items-start justify-between gap-4">
-            <div>
-              <div className="flex items-center gap-2 mb-1.5">
+        {/* Content */}
+        <div className="flex flex-col justify-between flex-1 p-[clamp(14px,2.5vw,20px)] gap-[clamp(12px,2vw,16px)] min-w-0">
+          {/* Top — name + price */}
+          <div className="flex items-start justify-between gap-3">
+            <div className="min-w-0">
+              <div className="mb-1.5">
                 <StatusBadge status={status} />
               </div>
-              <h3 className="text-[17px] font-medium tracking-[-0.03em] text-black mb-1">
+              <h3 className="text-[clamp(14px,2vw,17px)] font-medium tracking-[-0.03em] text-black mb-1 truncate">
                 {dest.name}
               </h3>
-              <div className="flex items-center gap-1.5">
-                <FiMapPin className="w-3.5 h-3.5 text-[#aaa]" />
-                <span className="text-[13px] text-[#888] tracking-[-0.01em]">
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <FiMapPin className="w-3 h-3 text-[#bbb] shrink-0" />
+                <span className="text-[clamp(11px,1.5vw,13px)] text-[#888] tracking-[-0.01em]">
                   {dest.country}
                 </span>
                 <span className="text-[#ddd]">·</span>
-                <span className="text-[11px] font-medium tracking-[0.06em] uppercase text-[#aaa] bg-black/[0.04] px-2 py-0.5">
+                <span className="text-[10px] font-medium tracking-[0.06em] uppercase text-[#aaa] bg-black/[0.04] px-1.5 py-0.5 whitespace-nowrap">
                   {dest.category}
                 </span>
               </div>
             </div>
-
-            {/* Total price */}
             <div className="text-right shrink-0">
-              <div className="text-[20px] font-medium tracking-[-0.04em] text-black">
+              <div className="text-[clamp(16px,2.5vw,20px)] font-medium tracking-[-0.04em] text-black leading-none">
                 ${booking.totalPrice.toLocaleString()}
               </div>
-              <div className="text-[11px] text-[#aaa] tracking-[-0.01em]">
-                total · {booking.travellers}{" "}
+              <div className="text-[11px] text-[#aaa] tracking-[-0.01em] mt-0.5">
+                {booking.travellers}{" "}
                 {booking.travellers === 1 ? "person" : "people"}
               </div>
             </div>
           </div>
 
-          {/* Details row */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-            <div className="flex items-center gap-2">
-              <FiClock className="w-3.5 h-3.5 text-[#bbb] shrink-0" />
-              <div>
-                <div className="text-[10px] text-[#aaa] tracking-[0.06em] uppercase font-medium">
-                  Duration
-                </div>
-                <div className="text-[12.5px] text-black tracking-[-0.01em] font-medium">
-                  {dest.duration}
-                </div>
-              </div>
-            </div>
-            <div className="flex items-center gap-2">
-              <FiCalendar className="w-3.5 h-3.5 text-[#bbb] shrink-0" />
-              <div>
-                <div className="text-[10px] text-[#aaa] tracking-[0.06em] uppercase font-medium">
-                  Travel date
-                </div>
-                <div className="text-[12.5px] text-black tracking-[-0.01em] font-medium">
-                  {booking.travelDate}
-                </div>
-              </div>
-            </div>
-            <div className="flex items-center gap-2">
-              <FiTag className="w-3.5 h-3.5 text-[#bbb] shrink-0" />
-              <div>
-                <div className="text-[10px] text-[#aaa] tracking-[0.06em] uppercase font-medium">
-                  Per person
-                </div>
-                <div className="text-[12.5px] text-black tracking-[-0.01em] font-medium">
-                  ${dest.price.toLocaleString()}
+          {/* Details */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-[clamp(8px,1.5vw,12px)]">
+            {[
+              {
+                icon: <FiClock className="w-3 h-3 text-[#bbb] shrink-0" />,
+                label: "Duration",
+                value: dest.duration,
+              },
+              {
+                icon: <FiCalendar className="w-3 h-3 text-[#bbb] shrink-0" />,
+                label: "Travel date",
+                value: booking.travelDate,
+              },
+              {
+                icon: <FiTag className="w-3 h-3 text-[#bbb] shrink-0" />,
+                label: "Per person",
+                value: `$${dest.price.toLocaleString()}`,
+              },
+            ].map((d) => (
+              <div key={d.label} className="flex items-start gap-1.5">
+                <div className="mt-[3px]">{d.icon}</div>
+                <div className="min-w-0">
+                  <div className="text-[10px] text-[#aaa] tracking-[0.06em] uppercase font-medium">
+                    {d.label}
+                  </div>
+                  <div className="text-[clamp(11px,1.5vw,12.5px)] text-black tracking-[-0.01em] font-medium truncate">
+                    {d.value}
+                  </div>
                 </div>
               </div>
-            </div>
+            ))}
           </div>
 
-          {/* Bottom row — booked on + actions */}
-          <div className="flex items-center justify-between pt-3 border-t border-black/[0.06]">
-            <span className="text-[12px] text-[#aaa] tracking-[-0.01em]">
-              Booked on {booking.bookedOn}
+          {/* Footer — booked on + actions */}
+          <div className="flex items-center justify-between gap-3 pt-[clamp(10px,1.5vw,14px)] border-t border-black/[0.06] flex-wrap">
+            <span className="text-[clamp(11px,1.3vw,12px)] text-[#bbb] tracking-[-0.01em] shrink-0">
+              Booked {booking.bookedOn}
             </span>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 shrink-0">
               {!cancelled && (
                 <button
                   onClick={handleCancel}
-                  className="flex items-center gap-1.5 text-[12px] text-[#aaa] tracking-[-0.01em] border border-black/[0.08] px-3 py-1.5 hover:text-red-500 hover:border-red-200 transition-all"
+                  className="flex items-center gap-1.5 text-[clamp(11px,1.3vw,12px)] text-[#aaa] tracking-[-0.01em] border border-black/[0.08] px-3 py-1.5 hover:text-red-500 hover:border-red-200 transition-all"
                 >
-                  <FiX className="w-3.5 h-3.5" />
+                  <FiX className="w-3 h-3" />
                   Cancel
                 </button>
               )}
               <Link
                 href={`/destinations/${dest._id}`}
-                className="flex items-center gap-1.5 text-[12px] text-[#555] tracking-[-0.01em] border border-black/[0.12] px-3 py-1.5 hover:text-black hover:border-black/25 transition-all"
+                className="flex items-center gap-1.5 text-[clamp(11px,1.3vw,12px)] text-[#555] tracking-[-0.01em] border border-black/[0.12] px-3 py-1.5 hover:text-black hover:border-black/25 transition-all"
               >
                 View trip
-                <FiArrowUpRight className="w-3.5 h-3.5" />
+                <FiArrowUpRight className="w-3 h-3" />
               </Link>
             </div>
           </div>
@@ -249,30 +238,30 @@ export default function MyBookingsPage() {
 
   return (
     <main className="min-h-screen bg-white pt-[52px]">
-      <div className="max-w-4xl mx-auto px-5">
+      <div className="max-w-4xl mx-auto px-[clamp(16px,4vw,24px)]">
         {/* Header */}
-        <div className="py-12 border-b border-black/[0.06]">
+        <div className="py-[clamp(32px,5vw,48px)] border-b border-black/[0.06]">
           <span className="text-[11px] font-medium tracking-[0.14em] uppercase text-[#aaa] block mb-3">
             My account
           </span>
-          <h1 className="text-[32px] md:text-[42px] font-medium tracking-[-0.04em] text-black leading-[1.05] mb-2">
+          <h1 className="text-[clamp(26px,5vw,42px)] font-medium tracking-[-0.04em] text-black leading-[1.05] mb-2">
             My bookings
           </h1>
-          <p className="text-[14px] text-[#888] tracking-[-0.01em]">
+          <p className="text-[clamp(13px,1.5vw,14px)] text-[#888] tracking-[-0.01em]">
             {BOOKINGS.length} booking{BOOKINGS.length !== 1 ? "s" : ""} total
           </p>
         </div>
 
         {/* Empty state */}
         {BOOKINGS.length === 0 && (
-          <div className="flex flex-col items-center justify-center py-24 text-center">
+          <div className="flex flex-col items-center justify-center py-[clamp(48px,8vw,96px)] text-center">
             <div className="w-12 h-12 border border-black/[0.08] flex items-center justify-center mb-5">
               <FiInbox className="w-5 h-5 text-[#ccc]" />
             </div>
-            <h3 className="text-[16px] font-medium text-black tracking-[-0.02em] mb-2">
+            <h3 className="text-[clamp(15px,2vw,16px)] font-medium text-black tracking-[-0.02em] mb-2">
               No bookings yet
             </h3>
-            <p className="text-[13px] text-[#aaa] tracking-[-0.01em] mb-6">
+            <p className="text-[clamp(12px,1.5vw,13px)] text-[#aaa] tracking-[-0.01em] mb-6">
               When you book a trip it will appear here
             </p>
             <Link
@@ -286,16 +275,9 @@ export default function MyBookingsPage() {
 
         {/* Confirmed */}
         {confirmed.length > 0 && (
-          <div className="py-10 border-b border-black/[0.06]">
-            <div className="flex items-center gap-3 mb-6">
-              <h2 className="text-[13px] font-medium tracking-[-0.01em] text-black">
-                Confirmed
-              </h2>
-              <span className="text-[11px] text-[#aaa] bg-black/[0.04] px-2 py-0.5">
-                {confirmed.length}
-              </span>
-            </div>
-            <div className="flex flex-col gap-4">
+          <div className="py-[clamp(24px,4vw,40px)] border-b border-black/[0.06]">
+            <SectionLabel label="Confirmed" count={confirmed.length} />
+            <div className="flex flex-col gap-[clamp(10px,1.5vw,16px)]">
               {confirmed.map((b) => (
                 <BookingCard key={b._id} booking={b} />
               ))}
@@ -305,16 +287,9 @@ export default function MyBookingsPage() {
 
         {/* Pending */}
         {pending.length > 0 && (
-          <div className="py-10 border-b border-black/[0.06]">
-            <div className="flex items-center gap-3 mb-6">
-              <h2 className="text-[13px] font-medium tracking-[-0.01em] text-black">
-                Pending
-              </h2>
-              <span className="text-[11px] text-[#aaa] bg-black/[0.04] px-2 py-0.5">
-                {pending.length}
-              </span>
-            </div>
-            <div className="flex flex-col gap-4">
+          <div className="py-[clamp(24px,4vw,40px)] border-b border-black/[0.06]">
+            <SectionLabel label="Pending" count={pending.length} />
+            <div className="flex flex-col gap-[clamp(10px,1.5vw,16px)]">
               {pending.map((b) => (
                 <BookingCard key={b._id} booking={b} />
               ))}
@@ -324,16 +299,9 @@ export default function MyBookingsPage() {
 
         {/* Cancelled */}
         {cancelled.length > 0 && (
-          <div className="py-10">
-            <div className="flex items-center gap-3 mb-6">
-              <h2 className="text-[13px] font-medium tracking-[-0.01em] text-[#aaa]">
-                Cancelled
-              </h2>
-              <span className="text-[11px] text-[#ccc] bg-black/[0.03] px-2 py-0.5">
-                {cancelled.length}
-              </span>
-            </div>
-            <div className="flex flex-col gap-4">
+          <div className="py-[clamp(24px,4vw,40px)]">
+            <SectionLabel label="Cancelled" count={cancelled.length} muted />
+            <div className="flex flex-col gap-[clamp(10px,1.5vw,16px)]">
               {cancelled.map((b) => (
                 <BookingCard key={b._id} booking={b} />
               ))}
@@ -341,7 +309,7 @@ export default function MyBookingsPage() {
           </div>
         )}
 
-        <div className="pb-16" />
+        <div className="pb-[clamp(40px,6vw,64px)]" />
       </div>
     </main>
   );

@@ -5,6 +5,7 @@ import Image from "next/image";
 import { FiTrash2, FiX } from "react-icons/fi";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import { authClient } from "@/lib/auth-client";
 
 export function DeleteBooking({ booking }) {
   const [open, setOpen] = useState(false);
@@ -14,9 +15,14 @@ export function DeleteBooking({ booking }) {
 
   const handleDelete = async () => {
     setLoading(true);
+    const { data } = await authClient.token();
+    const token = data?.token;
     const res = await fetch(`http://localhost:4000/booking/${booking._id}`, {
       method: "DELETE",
-      headers: { "content-type": "application/json" },
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${token}`,
+      },
     });
     setLoading(false);
     if (res.ok) {

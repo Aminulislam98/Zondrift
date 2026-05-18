@@ -7,16 +7,12 @@ import { FiX, FiChevronLeft, FiChevronRight } from "react-icons/fi";
 export default function DestinationGallery({ image, images = [] }) {
   const [lightbox, setLightbox] = useState(null);
 
-  // Build gallery array — main image first, then extras
   const allImages = [image, ...images.filter(Boolean)].filter(Boolean);
-
-  // Fill to 5 slots — null means placeholder
   const slots = [...allImages, ...Array(5).fill(null)].slice(0, 5);
 
   const openLightbox = (i) => {
     if (allImages[i]) setLightbox(i);
   };
-
   const prev = () => setLightbox((i) => (i > 0 ? i - 1 : allImages.length - 1));
   const next = () => setLightbox((i) => (i < allImages.length - 1 ? i + 1 : 0));
 
@@ -36,8 +32,7 @@ export default function DestinationGallery({ image, images = [] }) {
                 alt="Main"
                 fill
                 priority
-                quality={100}
-                unoptimized
+                quality={75}
                 sizes="(max-width: 768px) 50vw, 40vw"
                 className="object-cover transition-transform duration-500 group-hover:scale-[1.02]"
               />
@@ -65,13 +60,11 @@ export default function DestinationGallery({ image, images = [] }) {
                   src={src}
                   alt={`Photo ${i + 2}`}
                   fill
-                  quality={90}
-                  unoptimized
-                  sizes="(max-width: 768px) 50vw, 20vw"
+                  quality={70}
+                  sizes="(max-width: 768px) 25vw, 15vw"
                   className="object-cover transition-transform duration-500 group-hover:scale-[1.02]"
                 />
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
-                {/* Show all photos button on last slot */}
                 {i === 3 && allImages.length > 5 && (
                   <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
                     <span className="text-white text-[13px] font-medium tracking-[-0.01em]">
@@ -97,7 +90,6 @@ export default function DestinationGallery({ image, images = [] }) {
           className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center"
           onClick={() => setLightbox(null)}
         >
-          {/* Close */}
           <button
             onClick={() => setLightbox(null)}
             className="absolute top-4 right-4 w-9 h-9 bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
@@ -105,12 +97,10 @@ export default function DestinationGallery({ image, images = [] }) {
             <FiX className="w-5 h-5" />
           </button>
 
-          {/* Counter */}
           <span className="absolute top-4 left-1/2 -translate-x-1/2 text-[13px] text-white/60 tracking-[-0.01em]">
             {lightbox + 1} / {allImages.length}
           </span>
 
-          {/* Prev */}
           {allImages.length > 1 && (
             <button
               onClick={(e) => {
@@ -123,7 +113,6 @@ export default function DestinationGallery({ image, images = [] }) {
             </button>
           )}
 
-          {/* Image */}
           <div
             className="relative w-full max-w-4xl mx-[clamp(48px,8vw,80px)] aspect-[16/10]"
             onClick={(e) => e.stopPropagation()}
@@ -132,14 +121,12 @@ export default function DestinationGallery({ image, images = [] }) {
               src={allImages[lightbox]}
               alt={`Photo ${lightbox + 1}`}
               fill
-              quality={100}
-              unoptimized
+              quality={85}
               sizes="100vw"
               className="object-contain"
             />
           </div>
 
-          {/* Next */}
           {allImages.length > 1 && (
             <button
               onClick={(e) => {

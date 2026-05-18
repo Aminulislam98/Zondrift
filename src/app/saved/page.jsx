@@ -11,9 +11,7 @@ import {
 
 // ── Fetch saved destinations ──
 async function getSaved() {
-  const res = await fetch("http://localhost:4000/saved", {
-    cache: "no-store",
-  });
+  const res = await fetch("http://localhost:4000/saved");
   if (!res.ok) return [];
   return res.json();
 }

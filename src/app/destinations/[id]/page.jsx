@@ -16,13 +16,15 @@ import DestinationGallery from "@/components/DestinationGallery";
 
 export default async function DestinationDetailPage({ params }) {
   const { id } = await params;
-  const res = await fetch(`http://localhost:4000/destination/${id}`);
+  const res = await fetch(`http://localhost:4000/destination/${id}`, {
+    next: { revalidate: 60 },
+  });
   const dest = await res.json();
 
   return (
     <main className="min-h-screen bg-white pt-[52px]">
       <div className="max-w-6xl mx-auto px-[clamp(16px,4vw,32px)]">
-        {/* ── Back + name above gallery ── */}
+        {/* ── Back + name ── */}
         <div className="py-[clamp(12px,2vw,20px)]">
           <Link
             href="/destinations"
@@ -39,7 +41,7 @@ export default async function DestinationDetailPage({ params }) {
         {/* ── Gallery ── */}
         <DestinationGallery image={dest.image} images={dest.images} />
 
-        {/* ── Meta — under gallery ── */}
+        {/* ── Meta ── */}
         <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 pt-[clamp(16px,2.5vw,24px)] pb-[clamp(16px,2.5vw,24px)] border-b border-black/[0.06]">
           <div>
             <div className="flex items-center gap-2 mb-2 flex-wrap">
@@ -68,8 +70,6 @@ export default async function DestinationDetailPage({ params }) {
               </div>
             </div>
           </div>
-
-          {/* Save button */}
           <button className="hidden sm:flex items-center gap-2 text-[13px] text-[#555] border border-black/[0.12] px-4 py-2 hover:border-black/25 hover:text-black transition-all shrink-0 self-start">
             <FiHeart className="w-4 h-4" />
             Save
@@ -198,10 +198,9 @@ export default async function DestinationDetailPage({ params }) {
             )}
           </div>
 
-          {/* ── Right — sticky booking card ── */}
+          {/* ── Right — booking card ── */}
           <div className="hidden lg:block">
             <div className="sticky top-[calc(52px+16px)] border border-black/[0.1] overflow-hidden">
-              {/* Price */}
               <div className="px-6 py-5 border-b border-black/[0.07]">
                 <div className="flex items-baseline gap-1.5 mb-1">
                   <span className="text-[clamp(26px,3vw,36px)] font-semibold tracking-[-0.05em] text-black leading-none">
@@ -221,7 +220,6 @@ export default async function DestinationDetailPage({ params }) {
                 </div>
               </div>
 
-              {/* Details */}
               <div className="px-6 py-4 border-b border-black/[0.07]">
                 {[
                   {
@@ -262,7 +260,6 @@ export default async function DestinationDetailPage({ params }) {
                 ))}
               </div>
 
-              {/* Actions */}
               <div className="px-6 py-5 flex flex-col gap-3">
                 <Link
                   href={`/bookings/new/${dest._id}`}

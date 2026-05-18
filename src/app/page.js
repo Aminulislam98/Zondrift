@@ -1,11 +1,10 @@
 import FeaturedDestinations from "@/components/FeaturedDestination";
 import Footer from "@/components/Footer";
 import HeroSection from "@/components/HeroSection";
-import Navbar from "@/components/Navbar";
-import HowItWorks from "./howitworks/page";
-import WhyZondrift from "./whyzondrift/page";
-import Testimonials from "./testmonials/page";
-import CallToAction from "./calltoaction/page";
+import CallToAction from "@/components/homeLayout/CallToAction";
+import HowItWorks from "@/components/homeLayout/HowItWorks";
+import Testimonials from "@/components/homeLayout/Testimonials";
+import WhyZondrift from "@/components/homeLayout/WhyZondrift";
 
 export default function Home() {
   return (

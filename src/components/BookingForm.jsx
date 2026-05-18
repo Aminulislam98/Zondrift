@@ -66,7 +66,7 @@ export default function BookingForm({ dest }) {
       year: "numeric",
     });
 
-    await fetch("http://localhost:4000/booking", {
+    await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/booking`, {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(bookingData),

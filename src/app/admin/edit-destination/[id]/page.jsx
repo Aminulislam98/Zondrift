@@ -3,7 +3,9 @@ import React from "react";
 
 const EditDestinationPage = async ({ params }) => {
   const { id } = await params;
-  const res = await fetch(`http://localhost:4000/destination/${id}`);
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/destination/${id}`,
+  );
   const existingData = await res.json();
   return (
     <div>

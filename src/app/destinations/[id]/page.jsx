@@ -22,11 +22,14 @@ export default async function DestinationDetailPage({ params }) {
     headers: await headers(),
   });
   console.log("this is token:", token);
-  const res = await fetch(`http://localhost:4000/destination/${id}`, {
-    headers: {
-      authorization: `Bearer ${token}`,
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/destination/${id}`,
+    {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
     },
-  });
+  );
   const dest = await res.json();
 
   return (

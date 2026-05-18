@@ -8,12 +8,15 @@ import toast from "react-hot-toast";
 export function DeleteDestination({ dest }) {
   const router = useRouter();
   const handleDelete = async (dest) => {
-    const res = await fetch(`http://localhost:4000/destination/${dest._id}`, {
-      method: "DELETE",
-      headers: {
-        "content-type": "application/json",
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/destination/${dest._id}`,
+      {
+        method: "DELETE",
+        headers: {
+          "content-type": "application/json",
+        },
       },
-    });
+    );
     const data = await res.json();
     if (res.ok) {
       toast.success(`${dest.name} deleted successfully`);

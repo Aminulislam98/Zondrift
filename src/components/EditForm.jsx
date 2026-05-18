@@ -168,7 +168,7 @@ export default function EditForm({ existingData }) {
     editedForm.trips = Number(editedForm.trips);
 
     const res = await fetch(
-      `http://localhost:4000/destination/${existingData._id}`,
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/destination/${existingData._id}`,
       {
         method: "PATCH",
         headers: {

@@ -2,7 +2,7 @@ import DestinationCard from "@/components/DestinationCard";
 import DestinationFilterBar from "@/components/DestinationFilterBar";
 
 export default async function DestinationsPage() {
-  const res = await fetch("http://localhost:4000/destination");
+  const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/destination`);
   const destinations = await res.json();
 
   return (

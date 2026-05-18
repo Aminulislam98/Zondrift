@@ -10,7 +10,9 @@ import {
 } from "react-icons/fi";
 
 async function getSaved() {
-  const res = await fetch("http://localhost:4000/saved", { cache: "no-store" });
+  const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/saved`, {
+    cache: "no-store",
+  });
   if (!res.ok) return [];
   return res.json();
 }

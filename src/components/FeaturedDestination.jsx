@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default async function FeaturedDestinations() {
-  const res = await fetch("http://localhost:4000/destination", {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/destination`, {
     next: { revalidate: 60 },
   });
   const destinations = await res.json();

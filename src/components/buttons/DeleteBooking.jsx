@@ -17,13 +17,16 @@ export function DeleteBooking({ booking }) {
     setLoading(true);
     const { data } = await authClient.token();
     const token = data?.token;
-    const res = await fetch(`http://localhost:4000/booking/${booking._id}`, {
-      method: "DELETE",
-      headers: {
-        "content-type": "application/json",
-        authorization: `Bearer ${token}`,
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/booking/${booking._id}`,
+      {
+        method: "DELETE",
+        headers: {
+          "content-type": "application/json",
+          authorization: `Bearer ${token}`,
+        },
       },
-    });
+    );
     setLoading(false);
     if (res.ok) {
       toast.success(`${dest.name} booking deleted`);

@@ -172,11 +172,14 @@ export default function AddDestinationPage() {
     addDestinationData.rating = Number(addDestinationData.rating);
     addDestinationData.trips = Number(addDestinationData.trips);
 
-    const res = await fetch("http://localhost:4000/destination", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(addDestinationData),
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/destination`,
+      {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(addDestinationData),
+      },
+    );
 
     const data = await res.json();
     console.log("this is data that has been sent to mongodb : ", { data });

@@ -19,17 +19,25 @@ export default async function FeaturedDestinations() {
 
   return (
     <section className="bg-white py-[clamp(32px,5vw,56px)] px-[clamp(16px,4vw,40px)]">
-      <div className="max-w-[1400px] mx-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between gap-4 mb-[clamp(16px,2.5vw,28px)]">
-          <h2 className="text-[clamp(18px,2.5vw,26px)] font-bold tracking-[-0.03em] text-black">
-            Featured destinations
-          </h2>
+      <div className="max-w-6xl mx-auto">
+        {/* Header — same style as HowItWorks */}
+        <div className="flex items-end justify-between gap-4 mb-[clamp(24px,4vw,40px)]">
+          <div>
+            <span className="text-[11px] font-medium tracking-[0.14em] uppercase text-[#aaa] block mb-2">
+              Popular right now
+            </span>
+            <h2 className="text-[clamp(20px,3vw,30px)] font-semibold tracking-[-0.03em] text-black mb-1.5">
+              Places people can't stop talking about
+            </h2>
+            <p className="text-[clamp(12px,1.4vw,14px)] text-[#888] tracking-[-0.01em]">
+              Handpicked destinations loved by thousands of travellers
+            </p>
+          </div>
           <Link
             href="/destinations"
-            className="text-[clamp(12px,1.5vw,14px)] font-semibold text-[#0071c2] hover:text-[#005fa3] hover:underline transition-colors shrink-0"
+            className="text-[13px] font-semibold text-[#0071c2] hover:text-[#005fa3] hover:underline transition-colors shrink-0 hidden sm:block"
           >
-            Discover all
+            Discover all →
           </Link>
         </div>
 
@@ -41,7 +49,6 @@ export default async function FeaturedDestinations() {
               href={`/destinations/${dest._id}`}
               className="group flex flex-col bg-white rounded-xl overflow-hidden border border-black/[0.07] hover:shadow-[0_4px_20px_rgba(0,0,0,0.10)] transition-shadow duration-200"
             >
-              {/* Image */}
               <div className="relative w-full aspect-[4/3] overflow-hidden bg-black/[0.04]">
                 <Image
                   src={dest.image}
@@ -53,30 +60,27 @@ export default async function FeaturedDestinations() {
                 />
               </div>
 
-              {/* Content */}
               <div className="flex flex-col gap-1.5 p-2.5 flex-1">
                 <div>
                   <h3 className="text-[clamp(11px,1.2vw,13px)] font-bold tracking-[-0.02em] text-black leading-snug line-clamp-1">
                     {dest.name}
                   </h3>
-                  <p className="text-[10.5px] text-[#888] tracking-[-0.01em] truncate">
+                  <p className="text-[10.5px] text-[#888] truncate">
                     {dest.country}
                   </p>
                 </div>
 
-                {/* Rating */}
                 <div className="flex items-center gap-1.5">
                   <div className="bg-[#003b95] px-1.5 py-0.5 rounded">
                     <span className="text-[10px] font-bold text-white leading-none">
                       {dest.rating}
                     </span>
                   </div>
-                  <span className="text-[10px] font-medium text-black tracking-[-0.01em] truncate">
+                  <span className="text-[10px] font-medium text-black truncate">
                     {ratingLabel(dest.rating)}
                   </span>
                 </div>
 
-                {/* Price */}
                 <div className="mt-auto pt-1.5 border-t border-black/[0.05]">
                   <p className="text-[10px] text-[#777]">
                     From{" "}
@@ -88,6 +92,16 @@ export default async function FeaturedDestinations() {
               </div>
             </Link>
           ))}
+        </div>
+
+        {/* Mobile discover all */}
+        <div className="sm:hidden mt-4 text-center">
+          <Link
+            href="/destinations"
+            className="text-[13px] font-semibold text-[#0071c2] hover:underline"
+          >
+            Discover all destinations →
+          </Link>
         </div>
       </div>
     </section>

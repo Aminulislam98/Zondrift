@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function CallToAction() {
   return (
-    <section className="bg-[#f8f8f6] py-[clamp(48px,8vw,96px)] px-[clamp(16px,4vw,40px)]">
+    <section className="bg-[#f8f8f6] py-[clamp(48px,4vw,96px)] px-[clamp(16px,4vw,40px)]">
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col items-center text-center gap-[clamp(16px,2.5vw,28px)]">
           <span className="text-[11px] font-medium tracking-[0.14em] uppercase text-[#aaa]">

@@ -29,53 +29,48 @@ const steps = [
 
 export default function HowItWorks() {
   return (
-    <section className="bg-white py-[clamp(32px,5vw,56px)] px-[clamp(16px,4vw,40px)]">
+    <section className="bg-[#f8f8f6] py-[clamp(32px,2vw,56px)] px-[clamp(16px,4vw,40px)]">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="mb-[clamp(20px,3vw,32px)]">
-          <span className="text-[11px] font-medium tracking-[0.14em] uppercase text-[#aaa] block mb-2">
+        <div className="mb-[clamp(24px,4vw,40px)]">
+          <span className="text-center text-[11px] font-medium tracking-[0.14em] uppercase text-[#aaa] block mb-2">
             How it works
           </span>
-          <h2 className="text-[clamp(20px,3vw,32px)] font-medium tracking-[-0.04em] text-black leading-tight">
+          <h2 className="text-[clamp(20px,3vw,30px)] font-semibold tracking-[-0.03em] text-black mb-1.5 text-center">
             Three steps to your dream trip
           </h2>
         </div>
 
         {/* Steps */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-black/[0.06]">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-[clamp(12px,2vw,20px)]">
           {steps.map((step) => (
             <div
               key={step.number}
-              className="bg-white flex flex-col gap-3 p-[clamp(16px,3vw,28px)] relative group hover:bg-[#fafafa] transition-colors duration-300"
+              className="bg-white rounded-2xl p-[clamp(20px,3vw,32px)] flex flex-col gap-3"
             >
-              {/* Step number */}
-              <div className="flex items-center gap-3">
-                <span className="text-[11px] font-medium tracking-[0.1em] uppercase text-[#aaa] shrink-0">
-                  {step.number}
-                </span>
-                <div className="flex-1 h-px bg-black/[0.07]" />
-              </div>
+              {/* Number */}
+              <span className="text-[13px] font-bold text-[#bbb] tracking-[0.06em]">
+                {step.number}
+              </span>
 
               {/* Title */}
-              <h3 className="text-[clamp(14px,1.8vw,17px)] font-semibold tracking-[-0.03em] text-black leading-snug">
+              <h3 className="text-[clamp(15px,1.8vw,18px)] font-semibold tracking-[-0.02em] text-black leading-snug">
                 {step.title}
               </h3>
 
               {/* Description */}
-              <p className="text-[clamp(12px,1.4vw,13px)] text-[#777] tracking-[-0.01em] leading-relaxed flex-1">
+              <p className="text-[clamp(13px,1.4vw,14px)] text-[#666] leading-relaxed flex-1">
                 {step.description}
               </p>
 
               {/* Link */}
               <Link
                 href={step.link}
-                className="flex items-center gap-1.5 text-[12px] font-medium text-black tracking-[-0.01em] w-fit group/link mt-1"
+                className="flex items-center gap-1.5 text-[12.5px] font-medium text-black mt-2 w-fit hover:opacity-60 transition-opacity"
               >
-                <span className="border-b border-black/20 group-hover/link:border-black transition-colors pb-0.5">
-                  {step.linkLabel}
-                </span>
+                {step.linkLabel}
                 <svg
-                  className="w-3 h-3 group-hover/link:translate-x-0.5 transition-transform shrink-0"
+                  className="w-3 h-3 shrink-0"
                   viewBox="0 0 14 14"
                   fill="none"
                 >
@@ -88,9 +83,6 @@ export default function HowItWorks() {
                   />
                 </svg>
               </Link>
-
-              {/* Bottom accent line on hover */}
-              <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-black scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
             </div>
           ))}
         </div>

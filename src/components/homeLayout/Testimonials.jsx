@@ -32,7 +32,7 @@ const testimonials = [
 
 export default function Testimonials() {
   return (
-    <section className="bg-white py-[clamp(48px,8vw,96px)] px-[clamp(16px,4vw,40px)] border-t border-black/[0.06]">
+    <section className="bg-white py-[clamp(48px,4vw,96px)] px-[clamp(16px,4vw,40px)] border-t border-black/[0.06]">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-[clamp(12px,2vw,20px)] mb-[clamp(24px,4vw,48px)]">

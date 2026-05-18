@@ -29,14 +29,14 @@ const features = [
 
 export default function WhyZondrift() {
   return (
-    <section className="bg-[#f8f8f6] py-[clamp(48px,8vw,96px)] px-[clamp(16px,4vw,40px)]">
+    <section className="bg-[#f8f8f6] py-[clamp(48px,4vw,96px)] px-[clamp(16px,4vw,40px)]">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-[clamp(24px,4vw,48px)]">
-          <span className="text-[11px] font-medium tracking-[0.14em] uppercase text-[#aaa] block mb-[clamp(8px,1.5vw,14px)]">
+          <span className="text-center text-[11px] font-medium tracking-[0.14em] uppercase text-[#aaa] block mb-[clamp(8px,1.5vw,14px)]">
             Why Zondrift
           </span>
-          <h2 className="text-[clamp(24px,4vw,48px)] font-medium tracking-[-0.04em] text-black leading-[1.05] max-w-lg">
+          <h2 className="text-[clamp(20px,3vw,30px)] font-semibold tracking-[-0.03em] text-black mb-1.5 text-center">
             Everything you need. Nothing you don't.
           </h2>
         </div>

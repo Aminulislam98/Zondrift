@@ -2,9 +2,7 @@ import DestinationCard from "@/components/DestinationCard";
 import DestinationFilterBar from "@/components/DestinationFilterBar";
 
 export default async function DestinationsPage() {
-  const res = await fetch("http://localhost:4000/destination", {
-    cache: "no-store",
-  });
+  const res = await fetch("http://localhost:4000/destination");
   const destinations = await res.json();
 
   return (

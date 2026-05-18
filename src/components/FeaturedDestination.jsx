@@ -51,8 +51,8 @@ export default async function FeaturedDestinations() {
             >
               <div className="relative w-full aspect-[4/3] overflow-hidden bg-black/[0.04]">
                 <Image
-                  src={dest.image}
-                  alt={dest.name}
+                  src={dest?.image}
+                  alt={dest?.name}
                   fill
                   quality={75}
                   sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw"
